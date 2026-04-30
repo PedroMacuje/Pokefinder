@@ -11,5 +11,7 @@ export async function getPokemonList(limit = 20, offset = 0) {
     params: { limit, offset },
   });
 
-  return response.data;
+  return {
+    pokemons: response.data.results,
+  };
 }

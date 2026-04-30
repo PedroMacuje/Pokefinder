@@ -23,7 +23,7 @@ export default function Home() {
     setPokemons((prev) => {
       const existingNames = new Set(prev.map((p) => p.name));
 
-      const newPokemons = data.results.filter(
+      const newPokemons = data.pokemons.filter(
         (p) => !existingNames.has(p.name),
       );
 
@@ -65,7 +65,7 @@ export default function Home() {
       setIsFetching(true);
 
       const data = await getPokemonList(20, 0);
-      setPokemons(data.results);
+      setPokemons(data.pokemons);
       setOffset(20);
 
       setIsFetching(false);
