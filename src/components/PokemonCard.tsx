@@ -29,6 +29,10 @@ export default function PokemonCard({ index, name }: PokemonCardProps) {
     ? `${primaryGradient.split(" ")[0]} ${secondaryGradient.split(" ")[1]}`
     : primaryGradient;
 
+  function getTypes(type: string) {
+    return typeColors[type] || "bg-gray-400";
+  }
+
   useEffect(() => {
     async function fetchDetails() {
       const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
@@ -39,10 +43,6 @@ export default function PokemonCard({ index, name }: PokemonCardProps) {
 
     fetchDetails();
   }, [name]);
-
-  function getTypes(type: string) {
-    return typeColors[type] || "bg-gray-400";
-  }
 
   return (
     <div
