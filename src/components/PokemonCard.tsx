@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 
-import { typeColors, type PokemonDetails } from "../types/pokemon";
+import {
+  typeColors,
+  typeColorsGradient,
+  type PokemonDetails,
+} from "../types/pokemon";
 
 export interface PokemonCardProps {
   name: string;
@@ -12,7 +16,18 @@ export default function PokemonCard({ index, name }: PokemonCardProps) {
   const [types, setTypes] = useState<string[]>([]);
 
   const primaryType = types[0];
-  const gradient = typeColors[primaryType] || "from-gray-200 to-gray-300";
+  const secondaryType = types[1];
+
+  const primaryGradient =
+    (primaryType && typeColorsGradient[primaryType]) ||
+    "from-gray-200 to-gray-300";
+
+  const secondaryGradient =
+    (secondaryType && typeColorsGradient[secondaryType]) || null;
+
+  const gradient = secondaryGradient
+    ? `${primaryGradient.split(" ")[0]} ${secondaryGradient.split(" ")[1]}`
+    : primaryGradient;
 
   useEffect(() => {
     async function fetchDetails() {
@@ -24,6 +39,10 @@ export default function PokemonCard({ index, name }: PokemonCardProps) {
 
     fetchDetails();
   }, [name]);
+
+  function getTypes(type: string) {
+    return typeColors[type] || "bg-gray-400";
+  }
 
   return (
     <div
@@ -74,7 +93,7 @@ export default function PokemonCard({ index, name }: PokemonCardProps) {
           className="
             w-24 h-24 object-contain
             transition-transform duration-300
-            group-hover:scale-110 group-hover:rotate-2
+            group-hover:scale-110 group-hover:rotate-1
           "
         />
 
@@ -89,19 +108,28 @@ export default function PokemonCard({ index, name }: PokemonCardProps) {
         </span>
 
         {/* 🧬 Tipos */}
-        <div className="flex gap-2 mt-2">
-          {types.map((type) => (
-            <span
-              key={type}
-              className="
-                px-2 py-1 text-xs rounded-full
-                bg-black/10 text-gray-700
-                backdrop-blur-sm capitalize
-              "
-            >
-              {type}
-            </span>
-          ))}
+        <div className="flex gap-2 mt-3">
+          {types.map((type) => {
+            const color = getTypes(type);
+
+            return (
+              <span
+                key={type}
+                className={`
+                  px-3 py-1 text-xs font-medium 
+                  rounded-full capitalize
+                  text-gray-800 ${color}
+                  backdrop-blur-sm border 
+                  border-white/20 shadow-sm transition-all 
+                  duration-300 hover:scale-105 
+                  hover:shadow-md hover:brightness-110
+                  hover:-translate-y-0.5
+                `}
+              >
+                {type}
+              </span>
+            );
+          })}
         </div>
       </div>
     </div>
