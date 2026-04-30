@@ -21,8 +21,10 @@ export default function Home() {
     const data = await getPokemonList(20, offset);
 
     setPokemons((prev) => {
+      const existingNames = new Set(prev.map((p) => p.name));
+
       const newPokemons = data.results.filter(
-        (p: any) => !prev.some((existing) => existing.name === p.name),
+        (p) => !existingNames.has(p.name),
       );
 
       return [...prev, ...newPokemons];
