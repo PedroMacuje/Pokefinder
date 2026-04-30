@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { typeColors } from "../types/pokemon";
+import { typeColors, type PokemonDetails } from "../types/pokemon";
 
 export interface PokemonCardProps {
   name: string;
@@ -17,9 +17,9 @@ export default function PokemonCard({ index, name }: PokemonCardProps) {
   useEffect(() => {
     async function fetchDetails() {
       const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
-      const data = await res.json;
+      const data: PokemonDetails = await res.json();
 
-      setTypes(data.types.map((t: any) => t.type.name));
+      setTypes(data.types.map((t) => t.type.name));
     }
 
     fetchDetails();
