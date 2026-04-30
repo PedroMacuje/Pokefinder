@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 
-import { getPokemonList } from "../services/pokeAPI";
-
 import type { PokemonListItem } from "../types/pokemon";
+
+import PokemonCard from "../components/PokemonCard";
+
+import { getPokemonList } from "../services/pokeAPI";
 
 export default function Home() {
   const [pokemons, setPokemons] = useState<PokemonListItem[]>([]);
@@ -62,13 +64,12 @@ export default function Home() {
       <h1 className="text-2xl font-bold mb-4">Pokedex</h1>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {pokemons.map((pokemon) => (
-          <div
+        {pokemons.map((pokemon, index) => (
+          <PokemonCard
             key={pokemon.name}
-            className="p-4 bg-white rounded shadow text-center"
-          >
-            {pokemon.name}
-          </div>
+            index={index + 1}
+            name={pokemon.name}
+          />
         ))}
       </div>
 
