@@ -14,6 +14,27 @@ export interface PokemonDetails {
 }
 
 export const typeColors: Record<string, string> = {
+  grass: "bg-green-500",
+  fire: "bg-orange-500",
+  water: "bg-blue-500",
+  electric: "bg-yellow-400",
+  psychic: "bg-pink-500",
+  ice: "bg-cyan-400",
+  dragon: "bg-indigo-600",
+  dark: "bg-gray-800",
+  fairy: "bg-pink-400",
+  normal: "bg-gray-400",
+  fighting: "bg-red-600",
+  flying: "bg-sky-400",
+  poison: "bg-purple-500",
+  ground: "bg-yellow-600",
+  rock: "bg-yellow-800",
+  bug: "bg-lime-500",
+  ghost: "bg-indigo-700",
+  steel: "bg-gray-500",
+};
+
+export const typeColorsGradient: Record<string, string> = {
   grass: "from-green-400 to-green-600",
   fire: "from-orange-400 to-red-500",
   water: "from-blue-400 to-blue-600",
