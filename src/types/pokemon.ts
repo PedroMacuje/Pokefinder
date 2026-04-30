@@ -4,7 +4,7 @@ export interface PokemonListItem {
 }
 
 export interface PokemonListResponse {
-  response: PokemonListItem[];
+  results: PokemonListItem[];
 }
 
 export interface PokemonTypes {
