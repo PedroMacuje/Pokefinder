@@ -31,7 +31,7 @@ export default function PokemonCard({ index, name }: PokemonCardProps) {
           alt={name}
           className="
             w-24 h-24 object-contain transition-transform duration-300
-            group-hover:scale-110 group-hover:rotate-2
+            group-hover:scale-110 group-hover:rotate-1
           "
         />
 
@@ -41,7 +41,7 @@ export default function PokemonCard({ index, name }: PokemonCardProps) {
         </h2>
 
         {/* ID */}
-        <span className="text-sm text-gray-400">
+        <span className="text-sm text-gray-600">
           #{String(index).padStart(3, "0")}
         </span>
       </div>
