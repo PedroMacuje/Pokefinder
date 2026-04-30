@@ -19,11 +19,24 @@ export default function Home() {
     setIsFetching(true);
 
     const data = await getPokemonList(20, offset);
-    setPokemons((prev) => [...prev, ...data.results]);
+
+    setPokemons((prev) => {
+      const newPokemons = data.results.filter(
+        (p: any) => !prev.some((existing) => existing.name === p.name),
+      );
+
+      return [...prev, ...newPokemons];
+    });
+
     setOffset((prev) => prev + 20);
 
     setIsFetching(false);
   }, [offset, isFetching]);
+
+  function extractID(url: string) {
+    const parts = url.split("/");
+    return Number(parts[parts.length - 2]);
+  }
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -65,16 +78,21 @@ export default function Home() {
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {pokemons.map((pokemon, index) => (
-          <PokemonCard
-            key={pokemon.name}
-            index={index + 1}
-            name={pokemon.name}
-          />
+          <div
+            key={pokemon.url}
+            className="opacity-0 animate-fade-up"
+            style={{
+              animationDelay: `${(index % 20) * 80}ms`,
+              animationFillMode: "forwards",
+            }}
+          >
+            <PokemonCard index={extractID(pokemon.url)} name={pokemon.name} />
+          </div>
         ))}
       </div>
 
       {isFetching && (
-        <p className="text-center mt-4 text-gray-500">Carregando...</p>
+        <p className="text-center mt-4 text-gray-500">Loading...</p>
       )}
 
       <div ref={loadMoreRef} className="h-10"></div>
