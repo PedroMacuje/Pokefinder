@@ -118,7 +118,7 @@ export default function PokemonCard({ index, name }: PokemonCardProps) {
                 className={`
                   px-3 py-1 text-xs font-medium 
                   rounded-full capitalize
-                  text-gray-800 ${color}
+                  text-white ${color}
                   backdrop-blur-sm border 
                   border-white/20 shadow-sm transition-all 
                   duration-300 hover:scale-105 
