@@ -3,6 +3,16 @@ export interface PokemonListItem {
   url: string;
 }
 
+export interface PokemonTypes {
+  type: {
+    name: string;
+  };
+}
+
+export interface PokemonDetails {
+  types: PokemonTypes[];
+}
+
 export const typeColors: Record<string, string> = {
   grass: "from-green-400 to-green-600",
   fire: "from-orange-400 to-red-500",
