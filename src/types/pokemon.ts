@@ -3,6 +3,10 @@ export interface PokemonListItem {
   url: string;
 }
 
+export interface PokemonListResponse {
+  response: PokemonListItem[];
+}
+
 export interface PokemonTypes {
   type: {
     name: string;
