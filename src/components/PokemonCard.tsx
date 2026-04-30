@@ -48,8 +48,8 @@ export default function PokemonCard({ index, name }: PokemonCardProps) {
     <div
       className={`
         group relative p-4 rounded-2xl 
-        bg-white/70 backdrop-blur-md
-        shadow-md hover:shadow-xl
+        bg-white/70 border border-white/30
+        shadow-lg hover:shadow-xl
         transition-all duration-300
         hover:-translate-y-2 hover:scale-[1.03]
         cursor-pointer overflow-hidden
