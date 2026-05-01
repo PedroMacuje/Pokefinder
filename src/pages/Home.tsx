@@ -47,11 +47,6 @@ export default function Home() {
     setIsFetching(false);
   }, [offset, isFetching]);
 
-  function extractID(url: string) {
-    const parts = url.split("/");
-    return Number(parts[parts.length - 2]);
-  }
-
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
@@ -114,7 +109,7 @@ export default function Home() {
             }}
           >
             <PokemonCard
-              id={extractID(pokemon.url)}
+              id={pokemon.id}
               name={pokemon.name}
               types={pokemon.types}
             />
