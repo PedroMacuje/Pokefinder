@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 
-import type { Pokemon } from "../types/pokemon";
+import type { Pokemon, PokemonDetails } from "../types/pokemon";
 
 import PokemonCard from "../components/PokemonCard";
 
@@ -11,7 +11,7 @@ export default function Home() {
   const [offset, setOffset] = useState(0);
   const [isFetching, setIsFetching] = useState(false);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
-  const pokemonCache = new Map<string, any>();
+  const pokemonCache = useRef<Map<string, PokemonDetails>>(new Map());
 
   const loadMore = useCallback(async () => {
     if (isFetching) return;
@@ -22,13 +22,15 @@ export default function Home() {
 
     const detailedPokemons = await Promise.all(
       data.pokemons.map(async (p) => {
-        let details;
+        let details: PokemonDetails;
 
-        if (pokemonCache.has(p.name)) {
-          details = pokemonCache.get(p.name);
+        const cached = pokemonCache.current.get(p.name);
+
+        if (cached) {
+          details = cached;
         } else {
           details = await getPokemonDetails(p.name);
-          pokemonCache.set(p.name, details);
+          pokemonCache.current.set(p.name, details);
         }
 
         return {
@@ -82,7 +84,16 @@ export default function Home() {
 
       const detailedPokemons = await Promise.all(
         data.pokemons.map(async (p) => {
-          const details = await getPokemonDetails(p.name);
+          let details: PokemonDetails;
+
+          const cached = pokemonCache.current.get(p.name);
+
+          if (cached) {
+            details = cached;
+          } else {
+            details = await getPokemonDetails(p.name);
+            pokemonCache.current.set(p.name, details);
+          }
 
           return {
             ...p,
