@@ -96,7 +96,7 @@ export default function PokemonCard({ index, name }: PokemonCardProps) {
           {name}
         </h2>
 
-        <span className="text-sm text-gray-500">
+        <span className="text-sm text-gray-400">
           #{String(index).padStart(3, "0")}
         </span>
 
