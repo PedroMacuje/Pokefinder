@@ -4,7 +4,7 @@ import type { PokemonListItem } from "../types/pokemon";
 
 import PokemonCard from "../components/PokemonCard";
 
-import { getPokemonList } from "../services/pokeAPI";
+import { getPokemonDetails, getPokemonList } from "../services/pokeAPI";
 
 export default function Home() {
   const [pokemons, setPokemons] = useState<PokemonListItem[]>([]);
@@ -20,10 +20,22 @@ export default function Home() {
 
     const data = await getPokemonList(20, offset);
 
+    const detailedPokemons = await Promise.all(
+      data.pokemons.map(async (p) => {
+        const details = await getPokemonDetails(p.name);
+
+        return {
+          ...p,
+          id: details.id,
+          types: details.types.map((t) => t.type.name),
+        };
+      }),
+    );
+
     setPokemons((prev) => {
       const existingNames = new Set(prev.map((p) => p.name));
 
-      const newPokemons = data.pokemons.filter(
+      const newPokemons = detailedPokemons.filter(
         (p) => !existingNames.has(p.name),
       );
 
