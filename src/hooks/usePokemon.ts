@@ -4,14 +4,22 @@ import type { Pokemon, PokemonDetails } from "../types/pokemon";
 import { getPokemonDetails, getPokemonList } from "../services/pokeAPI";
 
 export function usePokemon() {
+  // Main state holding the list of fully processed Pokémon
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
+
+  // Offset used for pagination
   const [offset, setOffset] = useState(0);
+
+  // Prevents multiple simultaneous fetches
   const [isFetching, setIsFetching] = useState(false);
 
-  // Cache
+  // In-memory cache that persists across renders without triggering re-renders
   const cache = useRef<Map<string, PokemonDetails>>(new Map());
 
-  // Cache Search
+  /**
+   * Fetches Pokémon details with caching.
+   * Avoids redundant API calls by storing results in a Map.
+   */
   const fetchWithCache = useCallback(
     async (name: string): Promise<PokemonDetails> => {
       const cached = cache.current.get(name);
@@ -26,7 +34,10 @@ export function usePokemon() {
     [],
   );
 
-  // Base function
+  /**
+   * Fetches a batch of Pokémon and enriches them with details.
+   * Centralizes logic used by both initial load and infinite scroll.
+   */
   const fetchBatch = useCallback(
     async (limit: number, currentOffset: number) => {
       const data = await getPokemonList(limit, currentOffset);
@@ -48,7 +59,10 @@ export function usePokemon() {
     [fetchWithCache],
   );
 
-  // Endless Scroll
+  /**
+   * Loads the next batch of Pokémon (infinite scroll).
+   * Ensures no duplicate entries are added.
+   */
   const loadMore = useCallback(async () => {
     if (isFetching) return;
 
@@ -68,7 +82,10 @@ export function usePokemon() {
     setIsFetching(false);
   }, [offset, isFetching, fetchBatch]);
 
-  // Execute on build
+  /**
+   * Initial data load (runs once on mount).
+   * Uses the same batch logic to keep behavior consistent.
+   */
   useEffect(() => {
     const init = async () => {
       setIsFetching(true);
