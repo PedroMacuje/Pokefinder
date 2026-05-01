@@ -1,20 +1,15 @@
-import { useEffect, useState } from "react";
-
-import {
-  typeColors,
-  typeColorsGradient,
-  type PokemonDetails,
-} from "../types/pokemon";
+import { typeColors, typeColorsGradient } from "../types/pokemon";
 
 export interface PokemonCardProps {
   name: string;
-  index: number;
+  id: number;
+  types: string[];
 }
 
-export default function PokemonCard({ index, name }: PokemonCardProps) {
-  const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${index}.png`;
-  const [types, setTypes] = useState<string[]>([]);
+export default function PokemonCard({ id, types, name }: PokemonCardProps) {
+  const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
 
+  // Gradient control
   const primaryType = types[0];
   const secondaryType = types[1];
 
@@ -32,17 +27,7 @@ export default function PokemonCard({ index, name }: PokemonCardProps) {
   function getTypes(type: string) {
     return typeColors[type] || "bg-gray-400";
   }
-
-  useEffect(() => {
-    async function fetchDetails() {
-      const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
-      const data: PokemonDetails = await res.json();
-
-      setTypes(data.types.map((t) => t.type.name));
-    }
-
-    fetchDetails();
-  }, [name]);
+  // Gradient control
 
   return (
     <div
@@ -97,7 +82,7 @@ export default function PokemonCard({ index, name }: PokemonCardProps) {
         </h2>
 
         <span className="text-sm text-gray-400">
-          #{String(index).padStart(3, "0")}
+          #{String(id).padStart(3, "0")}
         </span>
 
         <div className="flex gap-2 mt-3">

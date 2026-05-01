@@ -1,3 +1,10 @@
+export interface Pokemon {
+  name: string;
+  url: string;
+  id: number;
+  types: string[];
+}
+
 export interface PokemonListItem {
   name: string;
   url: string;
@@ -14,6 +21,7 @@ export interface PokemonTypes {
 }
 
 export interface PokemonDetails {
+  id: number;
   types: PokemonTypes[];
 }
 
