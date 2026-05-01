@@ -1,60 +1,13 @@
-import { useEffect, useRef, useState, useCallback } from "react";
-
-import type { Pokemon, PokemonDetails } from "../types/pokemon";
+import { useEffect, useRef } from "react";
 
 import PokemonCard from "../components/PokemonCard";
 
-import { getPokemonDetails, getPokemonList } from "../services/pokeAPI";
+import { usePokemon } from "../hooks/usePokemon";
 
 export default function Home() {
-  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
-  const [offset, setOffset] = useState(0);
-  const [isFetching, setIsFetching] = useState(false);
+  const { pokemons, isFetching, loadMore } = usePokemon();
+
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
-  const pokemonCache = useRef<Map<string, PokemonDetails>>(new Map());
-
-  const loadMore = useCallback(async () => {
-    if (isFetching) return;
-
-    setIsFetching(true);
-
-    const data = await getPokemonList(20, offset);
-
-    const detailedPokemons = await Promise.all(
-      data.pokemons.map(async (p) => {
-        let details: PokemonDetails;
-
-        const cached = pokemonCache.current.get(p.name);
-
-        if (cached) {
-          details = cached;
-        } else {
-          details = await getPokemonDetails(p.name);
-          pokemonCache.current.set(p.name, details);
-        }
-
-        return {
-          ...p,
-          id: details.id,
-          types: details.types.map((t) => t.type.name),
-        };
-      }),
-    );
-
-    setPokemons((prev) => {
-      const existingNames = new Set(prev.map((p) => p.name));
-
-      const newPokemons = detailedPokemons.filter(
-        (p) => !existingNames.has(p.name),
-      );
-
-      return [...prev, ...newPokemons];
-    });
-
-    setOffset((prev) => prev + 20);
-
-    setIsFetching(false);
-  }, [offset, isFetching]);
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -65,52 +18,12 @@ export default function Home() {
 
     const currentRef = loadMoreRef.current;
 
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
+    if (currentRef) observer.observe(currentRef);
 
     return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
+      if (currentRef) observer.unobserve(currentRef);
     };
   }, [loadMore]);
-
-  useEffect(() => {
-    async function initialLoad() {
-      setIsFetching(true);
-
-      const data = await getPokemonList(20, 0);
-
-      const detailedPokemons = await Promise.all(
-        data.pokemons.map(async (p) => {
-          let details: PokemonDetails;
-
-          const cached = pokemonCache.current.get(p.name);
-
-          if (cached) {
-            details = cached;
-          } else {
-            details = await getPokemonDetails(p.name);
-            pokemonCache.current.set(p.name, details);
-          }
-
-          return {
-            ...p,
-            id: details.id,
-            types: details.types.map((t) => t.type.name),
-          };
-        }),
-      );
-
-      setPokemons(detailedPokemons);
-      setOffset(20);
-
-      setIsFetching(false);
-    }
-
-    initialLoad();
-  }, []);
 
   return (
     <div className="p-4">
