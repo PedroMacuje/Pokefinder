@@ -10,8 +10,8 @@ export default function Home() {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
   const [offset, setOffset] = useState(0);
   const [isFetching, setIsFetching] = useState(false);
-
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  const pokemonCache = new Map<string, any>();
 
   const loadMore = useCallback(async () => {
     if (isFetching) return;
@@ -22,7 +22,14 @@ export default function Home() {
 
     const detailedPokemons = await Promise.all(
       data.pokemons.map(async (p) => {
-        const details = await getPokemonDetails(p.name);
+        let details;
+
+        if (pokemonCache.has(p.name)) {
+          details = pokemonCache.get(p.name);
+        } else {
+          details = await getPokemonDetails(p.name);
+          pokemonCache.set(p.name, details);
+        }
 
         return {
           ...p,
