@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 
-import type { PokemonListItem } from "../types/pokemon";
+import type { Pokemon } from "../types/pokemon";
 
 import PokemonCard from "../components/PokemonCard";
 
 import { getPokemonDetails, getPokemonList } from "../services/pokeAPI";
 
 export default function Home() {
-  const [pokemons, setPokemons] = useState<PokemonListItem[]>([]);
+  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
   const [offset, setOffset] = useState(0);
   const [isFetching, setIsFetching] = useState(false);
 
@@ -77,7 +77,20 @@ export default function Home() {
       setIsFetching(true);
 
       const data = await getPokemonList(20, 0);
-      setPokemons(data.pokemons);
+
+      const detailedPokemons = await Promise.all(
+        data.pokemons.map(async (p) => {
+          const details = await getPokemonDetails(p.name);
+
+          return {
+            ...p,
+            id: details.id,
+            types: details.types.map((t) => t.type.name),
+          };
+        }),
+      );
+
+      setPokemons(detailedPokemons);
       setOffset(20);
 
       setIsFetching(false);
@@ -100,7 +113,11 @@ export default function Home() {
               animationFillMode: "forwards",
             }}
           >
-            <PokemonCard index={extractID(pokemon.url)} name={pokemon.name} />
+            <PokemonCard
+              id={extractID(pokemon.url)}
+              name={pokemon.name}
+              types={pokemon.types}
+            />
           </div>
         ))}
       </div>
