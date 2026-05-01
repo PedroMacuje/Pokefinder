@@ -92,7 +92,7 @@ export default function PokemonCard({ index, name }: PokemonCardProps) {
           "
         />
 
-        <h2 className="mt-3 text-lg font-semibold capitalize text-gray-800">
+        <h2 className="mt-3 text-lg font-semibold capitalize text-white/80">
           {name}
         </h2>
 
