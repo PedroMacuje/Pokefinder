@@ -17,3 +17,7 @@ export function loadFromCache(): Pokemon[] {
     return [];
   }
 }
+
+export function clearCache() {
+  localStorage.removeItem(STORAGE_KEY);
+}
