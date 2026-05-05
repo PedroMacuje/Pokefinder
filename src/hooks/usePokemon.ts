@@ -50,6 +50,8 @@ export function usePokemon() {
             ...p,
             id: details.id,
             types: details.types.map((t) => t.type.name),
+            stats: details.stats,
+            abilities: details.abilities,
           };
         }),
       );

@@ -3,6 +3,32 @@ export interface Pokemon {
   url: string;
   id: number;
   types: string[];
+  stats: PokemonStats[];
+  abilities: PokemonAbility[];
+}
+export interface PokemonDetails {
+  id: number;
+  types: {
+    type: {
+      name: string;
+    };
+  }[];
+  stats: PokemonStats[];
+  abilities: PokemonAbility[];
+}
+
+export interface PokemonStats {
+  baseStat: number;
+  stat: {
+    name: string;
+  };
+}
+
+export interface PokemonAbility {
+  ability: {
+    name: string;
+    isHidden?: boolean;
+  };
 }
 
 export interface PokemonListItem {
@@ -18,11 +44,6 @@ export interface PokemonTypes {
   type: {
     name: string;
   };
-}
-
-export interface PokemonDetails {
-  id: number;
-  types: PokemonTypes[];
 }
 
 export const typeColors: Record<string, string> = {
