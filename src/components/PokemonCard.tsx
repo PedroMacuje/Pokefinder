@@ -4,9 +4,15 @@ export interface PokemonCardProps {
   name: string;
   id: number;
   types: string[];
+  onClick?: () => void;
 }
 
-export default function PokemonCard({ id, types, name }: PokemonCardProps) {
+export default function PokemonCard({
+  id,
+  types,
+  name,
+  onClick,
+}: PokemonCardProps) {
   const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
 
   // Gradient control
@@ -31,6 +37,7 @@ export default function PokemonCard({ id, types, name }: PokemonCardProps) {
 
   return (
     <div
+      onClick={onClick}
       className={`
         group relative p-4 rounded-2xl 
         bg-white/20 border border-white/30

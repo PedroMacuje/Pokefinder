@@ -1,11 +1,15 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import PokemonCard from "../components/PokemonCard";
+import type { Pokemon } from "../types/pokemon";
 
 import { usePokemon } from "../hooks/usePokemon";
 
+import PokemonCard from "../components/PokemonCard";
+import PokemonModal from "../components/PokemonModal";
+
 export default function Home() {
   const { pokemons, isFetching, loadMore } = usePokemon();
+  const [selectPokemon, setSelectPokemon] = useState<Pokemon | null>(null);
 
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
@@ -43,6 +47,7 @@ export default function Home() {
               id={pokemon.id}
               name={pokemon.name}
               types={pokemon.types}
+              onClick={() => setSelectPokemon(pokemon)}
             />
           </div>
         ))}
@@ -53,6 +58,12 @@ export default function Home() {
       )}
 
       <div ref={loadMoreRef} className="h-10"></div>
+      {selectPokemon && (
+        <PokemonModal
+          pokemon={selectPokemon}
+          onClose={() => setSelectPokemon(null)}
+        />
+      )}
     </div>
   );
 }
