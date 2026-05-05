@@ -13,6 +13,10 @@ export default function PokemonModal({ pokemon, onClose }: PokemonModalProps) {
   const [animate, setAnimate] = useState(false);
   const primaryType = pokemon.types[0];
 
+  const normalAbilities = pokemon.abilities.filter((a) => !a.is_hidden);
+
+  const hiddenAbility = pokemon.abilities.find((a) => a.is_hidden);
+
   const modalGradient =
     (primaryType && typeColorsGradient[primaryType]) ||
     "from-gray-200 to-gray-300";
@@ -148,23 +152,57 @@ export default function PokemonModal({ pokemon, onClose }: PokemonModalProps) {
           </div>
 
           {/* Abilities */}
-          <div className="mt-6 text-center">
-            <h3 className="font-semibold mb-2 text-white/70">Abilities</h3>
+          <div className="mt-6">
+            <h3 className="font-semibold mb-3 text-center text-white">
+              Abilities
+            </h3>
 
-            <div className="flex flex-wrap justify-center gap-2">
-              {pokemon.abilities.map((a) => (
-                <span
-                  key={a.ability.name}
-                  className="
-                    px-3 py-1
-                    bg-gray-200
-                    rounded-full
-                    text-sm capitalize
-                  "
-                >
-                  {a.ability.name}
-                </span>
-              ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+              {/* Normal abilities */}
+              <div className="text-center">
+                <p className="text-sm text-white/70 mb-2">Standard</p>
+
+                <div className="flex flex-wrap justify-center gap-2">
+                  {normalAbilities.map((a) => (
+                    <span
+                      key={a.ability.name}
+                      className="
+                        px-3 py-1
+                        bg-white/20 border border-white/30
+                        rounded-full
+                        text-sm capitalize text-white
+                        backdrop-blur-sm
+                      "
+                    >
+                      {a.ability.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Hidden ability */}
+              {hiddenAbility && (
+                <div>
+                  <p className="text-sm text-purple-300 mb-2 text-center">
+                    Hidden Ability
+                  </p>
+
+                  <div className="flex justify-center">
+                    <span
+                      className="
+                        px-3 py-1
+                        bg-purple-500/30 border border-purple-400/40
+                        rounded-full
+                        text-sm capitalize text-white
+                        backdrop-blur-sm
+                        shadow-md
+                      "
+                    >
+                      {hiddenAbility.ability.name}
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

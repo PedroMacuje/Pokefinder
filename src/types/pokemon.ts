@@ -27,8 +27,8 @@ export interface PokemonStats {
 export interface PokemonAbility {
   ability: {
     name: string;
-    isHidden?: boolean;
   };
+  is_hidden: boolean;
 }
 
 export interface PokemonListItem {
