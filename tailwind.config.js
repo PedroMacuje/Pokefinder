@@ -1,5 +1,3 @@
-import { transform } from 'typescript';
-
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -36,8 +34,8 @@ export default {
       },
       animation: {
         "fade-up": "fadeUp 0.5s ease forwards",
-        "fade-in": "fadeIn 0.2s ease-out",
-        "scale-in": "scaleIn 0.25s ease-out"
+        "fade-in": "fadeIn 0.2s ease-out forwards",
+        "scale-in": "scaleIn 0.25s ease-out forwards",
       },
     },
   },
