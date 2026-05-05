@@ -18,7 +18,7 @@ export interface PokemonDetails {
 }
 
 export interface PokemonStats {
-  baseStat: number;
+  base_stat: number;
   stat: {
     name: string;
   };
