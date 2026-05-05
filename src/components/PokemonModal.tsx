@@ -33,13 +33,11 @@ export default function PokemonModal({ pokemon, onClose }: PokemonModalProps) {
 
   // Trigger stat animation on mount / pokemon change
   useEffect(() => {
-    setAnimate(false);
-
-    const frame = requestAnimationFrame(() => {
+    const timeout = setTimeout(() => {
       setAnimate(true);
-    });
+    }, 50);
 
-    return () => cancelAnimationFrame(frame);
+    return () => clearTimeout(timeout);
   }, [pokemon.id]);
 
   function formatStatName(name: string) {
