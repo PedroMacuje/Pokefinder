@@ -5,6 +5,15 @@ interface AbilityProps {
   isHidden?: boolean;
 }
 
+type AbilityResponse = {
+  effect_entries: {
+    effect: string;
+    language: {
+      name: string;
+    };
+  }[];
+};
+
 export default function Ability({ name, isHidden }: AbilityProps) {
   const [open, setOpen] = useState(false);
   const [description, setDescription] = useState("");
@@ -29,11 +38,14 @@ export default function Ability({ name, isHidden }: AbilityProps) {
 
     try {
       const res = await fetch(`https://pokeapi.co/api/v2/ability/${name}`);
-      const data = await res.json();
+      const data: AbilityResponse = await res.json();
 
-      const entry = data.effect_entries.find(
-        (e: any) => e.language.name === "en",
-      );
+      if (!data.effect_entries) {
+        setDescription("No description available");
+        return;
+      }
+
+      const entry = data.effect_entries.find((e) => e.language.name === "en");
 
       const text = entry?.effect || "No description available";
 
