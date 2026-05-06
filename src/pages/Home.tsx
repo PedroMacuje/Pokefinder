@@ -5,7 +5,7 @@ import type { Pokemon } from "../types/pokemon";
 import { usePokemon } from "../hooks/usePokemon";
 
 import PokemonCard from "../components/PokemonCard";
-import PokemonModal from "../components/PokemonModal/index";
+import PokemonModal from "../components/PokemonModal";
 
 export default function Home() {
   const { pokemons, isFetching, loadMore } = usePokemon();

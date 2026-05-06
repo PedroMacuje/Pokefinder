@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 
-import getStatColor from "../../utils/statBarColor";
-
 import { typeColorsGradient, type Pokemon } from "../../types/pokemon";
+import StatBar from "./StatBar";
 
 interface PokemonModalProps {
   pokemon: Pokemon;
@@ -39,14 +38,6 @@ export default function PokemonModal({ pokemon, onClose }: PokemonModalProps) {
 
     return () => clearTimeout(timeout);
   }, [pokemon.id]);
-
-  function formatStatName(name: string) {
-    return name.replace("-", " ");
-  }
-
-  function getWidth(value: number) {
-    return `${Math.min(value, 250) / 2.5}%`;
-  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -120,31 +111,12 @@ export default function PokemonModal({ pokemon, onClose }: PokemonModalProps) {
             {/* Stats */}
             <div className="space-y-2">
               {pokemon.stats.map((stat, index) => (
-                <div key={stat.stat.name}>
-                  {/* Label */}
-                  <div className="flex justify-between text-sm mb-1">
-                    <span className="capitalize text-white">
-                      {formatStatName(stat.stat.name)}
-                    </span>
-                    <span className="text-white">{stat.base_stat}</span>
-                  </div>
-
-                  {/* Bar background */}
-                  <div className="w-full h-2 bg-gray-200 rounded">
-                    {/* Animated bar */}
-                    <div
-                      className={`
-                      h-2 rounded
-                      transition-[width] duration-700 ease-out
-                      `}
-                      style={{
-                        width: animate ? getWidth(stat.base_stat) : "0%",
-                        transitionDelay: `${index * 100}ms`,
-                        backgroundColor: getStatColor(stat.base_stat),
-                      }}
-                    />
-                  </div>
-                </div>
+                <StatBar
+                  animate={animate}
+                  baseStat={stat.base_stat}
+                  index={index}
+                  statLabel={stat.stat.name}
+                />
               ))}
             </div>
           </div>
