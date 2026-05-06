@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { typeColorsGradient, type Pokemon } from "../../types/pokemon";
 import StatBar from "./StatBar";
+import Ability from "./Ability";
 
 interface PokemonModalProps {
   pokemon: Pokemon;
@@ -133,19 +134,11 @@ export default function PokemonModal({ pokemon, onClose }: PokemonModalProps) {
                 <p className="text-sm text-white/70 mb-2">Standard</p>
 
                 <div className="flex flex-wrap justify-center gap-2">
-                  {normalAbilities.map((a) => (
-                    <span
-                      key={a.ability.name}
-                      className="
-                        px-3 py-1
-                        bg-white/20 border border-white/30
-                        rounded-full
-                        text-sm capitalize text-white
-                        backdrop-blur-sm
-                      "
-                    >
-                      {a.ability.name}
-                    </span>
+                  {normalAbilities.map((ability) => (
+                    <Ability
+                      name={ability.ability.name}
+                      key={ability.ability.name}
+                    />
                   ))}
                 </div>
               </div>
@@ -156,21 +149,7 @@ export default function PokemonModal({ pokemon, onClose }: PokemonModalProps) {
                   <p className="text-sm text-purple-300 mb-2 text-center">
                     Hidden Ability
                   </p>
-
-                  <div className="flex justify-center">
-                    <span
-                      className="
-                        px-3 py-1
-                        bg-purple-500/30 border border-purple-400/40
-                        rounded-full
-                        text-sm capitalize text-white
-                        backdrop-blur-sm
-                        shadow-md
-                      "
-                    >
-                      {hiddenAbility.ability.name}
-                    </span>
-                  </div>
+                  <Ability name={hiddenAbility.ability.name} isHidden />
                 </div>
               )}
             </div>
