@@ -1,4 +1,6 @@
-import getStatColor from "../../utils/statBarColor";
+import * as S from "./styles";
+
+import getStatColor from "../../../utils/statBarColor";
 
 interface StatBarProps {
   statLabel: string;
@@ -22,26 +24,19 @@ export default function StatBar({
   }
 
   return (
-    <div key={statLabel}>
-      {/* Label */}
-      <div className="flex justify-between text-sm mb-1">
-        <span className="capitalize text-white">
-          {formatStatName(statLabel)}
-        </span>
-        <span className="text-white">{baseStat}</span>
+    <div className={S.StatContainer}>
+      <div className={S.StatHeader}>
+        <span className={S.StatLabel}>{formatStatName(statLabel)}</span>
+        <span className={S.StatValue}>{baseStat}</span>
       </div>
-
-      {/* Bar background */}
-      <div className="w-full h-2 bg-gray-200 rounded">
-        {/* Animated bar */}
+      <div className={S.StatBackground}>
         <div
-          className={`
-                              h-2 rounded
-                              transition-[width] duration-700 ease-out
-                              `}
+          className={S.StatFill}
           style={{
             width: animate ? getWidth(baseStat) : "0%",
+
             transitionDelay: `${index * 100}ms`,
+
             backgroundColor: getStatColor(baseStat),
           }}
         />
