@@ -1,5 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 
+import { getAbilityVariant } from "./stylesVariant";
+
+import * as S from "./styles";
+
 interface AbilityProps {
   name: string;
   isHidden?: boolean;
@@ -16,13 +20,15 @@ type AbilityResponse = {
 
 export default function Ability({ name, isHidden }: AbilityProps) {
   const [open, setOpen] = useState(false);
+
   const [description, setDescription] = useState("");
 
   const cache = useRef<Map<string, string>>(new Map());
+
   const containerRef = useRef<HTMLDivElement>(null);
 
   async function handleClick() {
-    // toggle
+    // Toggle tooltip
     if (open) {
       setOpen(false);
       return;
@@ -30,18 +36,21 @@ export default function Ability({ name, isHidden }: AbilityProps) {
 
     setOpen(true);
 
-    // cache hit
+    // Cache hit
     if (cache.current.has(name)) {
       setDescription(cache.current.get(name)!);
+
       return;
     }
 
     try {
       const res = await fetch(`https://pokeapi.co/api/v2/ability/${name}`);
+
       const data: AbilityResponse = await res.json();
 
       if (!data.effect_entries) {
         setDescription("No description available");
+
         return;
       }
 
@@ -50,13 +59,14 @@ export default function Ability({ name, isHidden }: AbilityProps) {
       const text = entry?.effect || "No description available";
 
       cache.current.set(name, text);
+
       setDescription(text);
     } catch {
       setDescription("Failed to load description");
     }
   }
 
-  // close on outside click
+  // Close tooltip on outside click
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (!containerRef.current?.contains(e.target as Node)) {
@@ -65,42 +75,25 @@ export default function Ability({ name, isHidden }: AbilityProps) {
     }
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
-  const baseStyle = `
-    px-3 py-1
-    rounded-full
-    text-sm capitalize text-white
-    backdrop-blur-sm
-    transition hover:scale-105
-    border
-  `;
-
-  const variantStyle = isHidden
-    ? "bg-purple-500/30 border-purple-400/40"
-    : "bg-white/20 border-white/30";
-
   return (
-    <div ref={containerRef} className="relative">
-      {/* Ability tag */}
-      <button onClick={handleClick} className={`${baseStyle} ${variantStyle}`}>
+    <div ref={containerRef} className={S.AbilityContainer}>
+      <button
+        onClick={handleClick}
+        className={`
+          ${S.AbilityButton}
+          ${getAbilityVariant(isHidden)}
+        `}
+      >
         {name}
       </button>
 
-      {/* Tooltip */}
-      {open && (
-        <div
-          className="
-            absolute left-1/2 -translate-x-1/2 
-            top-full mt-2 w-64 p-3
-            bg-black/90 text-white text-xs
-            rounded-lg shadow-xl z-50
-          "
-        >
-          {description}
-        </div>
-      )}
+      {open && <div className={S.AbilityTooltip}>{description}</div>}
     </div>
   );
 }
