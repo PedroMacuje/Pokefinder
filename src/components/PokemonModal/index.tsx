@@ -1,31 +1,50 @@
 import { useEffect, useState } from "react";
 
-import * as S from "./styles";
+import type { PokemonModalData } from "../../types/Pokemon/modal";
 
-import { type Pokemon } from "../../types/pokemon";
+import { getPokemonModalData } from "../../services/Pokemon";
 
-import { typeColorsGradient } from "../../constants/pokemonTypeColors";
+import { getModalGradient } from "./stylesVariants";
 
 import StatBar from "./StatBar";
 import Ability from "./Ability";
 
+import * as S from "./styles";
+
 interface PokemonModalProps {
-  pokemon: Pokemon;
+  pokemonName: string;
   onClose: () => void;
 }
 
-export default function PokemonModal({ pokemon, onClose }: PokemonModalProps) {
+export default function PokemonModal({
+  pokemonName,
+  onClose,
+}: PokemonModalProps) {
+  // Full modal data
+  const [pokemon, setPokemon] = useState<PokemonModalData | null>(null);
+
+  // Loading state
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Stats animation state
   const [animate, setAnimate] = useState(false);
 
-  const primaryType = pokemon.types[0];
+  // Fetch modal data
+  useEffect(() => {
+    const fetchPokemon = async () => {
+      setIsLoading(true);
 
-  const normalAbilities = pokemon.abilities.filter((a) => !a.is_hidden);
+      try {
+        const data = await getPokemonModalData(pokemonName);
 
-  const hiddenAbility = pokemon.abilities.find((a) => a.is_hidden);
+        setPokemon(data);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const modalGradient =
-    (primaryType && typeColorsGradient[primaryType]) ||
-    "from-gray-200 to-gray-300";
+    fetchPokemon();
+  }, [pokemonName]);
 
   // Close modal on ESC
   useEffect(() => {
@@ -42,14 +61,36 @@ export default function PokemonModal({ pokemon, onClose }: PokemonModalProps) {
     };
   }, [onClose]);
 
-  // Trigger stat animation
+  // Trigger stats animation
   useEffect(() => {
     const timeout = setTimeout(() => {
       setAnimate(true);
     }, 50);
 
     return () => clearTimeout(timeout);
-  }, [pokemon.id]);
+  }, [pokemon]);
+
+  // Loading state
+  if (isLoading || !pokemon) {
+    return (
+      <div className={S.ModalWrapper}>
+        <div className={S.ModalOverlay} />
+
+        <div className={S.ModalContainer}>
+          <p className="text-white">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Abilities sorting logic
+  const normalAbilities = pokemon.abilities.filter(
+    (ability) => !ability.isHidden,
+  );
+  const hiddenAbility = pokemon.abilities.find((ability) => ability.isHidden);
+
+  // Modal background gradient
+  const modalGradient = getModalGradient(pokemon.types);
 
   return (
     <div className={S.ModalWrapper}>
@@ -71,8 +112,10 @@ export default function PokemonModal({ pokemon, onClose }: PokemonModalProps) {
           `}
         />
 
+        {/* Dark overlay */}
         <div className={S.ModalDarkLayer} />
 
+        {/* Glow */}
         <div className={S.ModalGlow} />
 
         {/* Header */}
@@ -80,18 +123,18 @@ export default function PokemonModal({ pokemon, onClose }: PokemonModalProps) {
           <h2 className={S.PokemonName}>{pokemon.name}</h2>
 
           <span className={S.PokemonId}>
-            #{String(pokemon.id).padStart(3, "0")}
+            # {String(pokemon.id).padStart(3, "0")}
           </span>
         </div>
 
-        {/* Content */}
+        {/* Main content */}
         <div className={S.ModalContent}>
-          {/* Top grid */}
+          {/* Top section */}
           <div className={S.TopGrid}>
-            {/* Image */}
+            {/* Pokemon image */}
             <div className={S.ImageContainer}>
               <img
-                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`}
+                src={pokemon.image}
                 alt={pokemon.name}
                 className={S.PokemonImage}
               />
@@ -101,11 +144,11 @@ export default function PokemonModal({ pokemon, onClose }: PokemonModalProps) {
             <div className={S.StatsContainer}>
               {pokemon.stats.map((stat, index) => (
                 <StatBar
-                  key={stat.stat.name}
+                  key={stat.name}
                   animate={animate}
-                  baseStat={stat.base_stat}
+                  baseStat={stat.value}
                   index={index}
-                  statLabel={stat.stat.name}
+                  statLabel={stat.name}
                 />
               ))}
             </div>
@@ -116,27 +159,24 @@ export default function PokemonModal({ pokemon, onClose }: PokemonModalProps) {
             <h3 className={S.SectionTitle}>Abilities</h3>
 
             <div className={S.AbilitiesGrid}>
-              {/* Standard abilities */}
+              {/* Standard */}
               <div className={S.AbilityColumn}>
                 <p className={S.AbilityLabel}>Standard</p>
 
                 <div className={S.AbilityList}>
                   {normalAbilities.map((ability) => (
-                    <Ability
-                      key={ability.ability.name}
-                      name={ability.ability.name}
-                    />
+                    <Ability key={ability.name} name={ability.name} />
                   ))}
                 </div>
               </div>
 
-              {/* Hidden ability */}
+              {/* Hidden */}
               {hiddenAbility && (
                 <div className={S.AbilityColumn}>
                   <p className={S.HiddenAbilityLabel}>Hidden Ability</p>
 
                   <div className={S.AbilityList}>
-                    <Ability name={hiddenAbility.ability.name} isHidden />
+                    <Ability name={hiddenAbility.name} isHidden />
                   </div>
                 </div>
               )}

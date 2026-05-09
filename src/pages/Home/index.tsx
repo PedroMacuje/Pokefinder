@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 
-import type { Pokemon } from "../../types/pokemon";
-
 import { usePokemon } from "../../hooks/usePokemon";
 
 import PokemonCard from "../../components/PokemonCard";
@@ -12,7 +10,7 @@ import * as S from "./styles";
 export default function Home() {
   const { pokemons, isFetching, loadMore } = usePokemon();
 
-  const [selectPokemon, setSelectPokemon] = useState<Pokemon | null>(null);
+  const [selectPokemon, setSelectPokemon] = useState<string | null>(null);
 
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
@@ -42,7 +40,7 @@ export default function Home() {
       <div className={S.PokemonGrid}>
         {pokemons.map((pokemon, index) => (
           <div
-            key={pokemon.url}
+            key={pokemon.name}
             className={S.PokemonCardWrapper}
             style={{
               animationDelay: `${(index % 20) * 80}ms`,
@@ -53,7 +51,7 @@ export default function Home() {
               id={pokemon.id}
               name={pokemon.name}
               types={pokemon.types}
-              onClick={() => setSelectPokemon(pokemon)}
+              onClick={() => setSelectPokemon(pokemon.name)}
             />
           </div>
         ))}
@@ -65,7 +63,7 @@ export default function Home() {
 
       {selectPokemon && (
         <PokemonModal
-          pokemon={selectPokemon}
+          pokemonName={selectPokemon}
           onClose={() => setSelectPokemon(null)}
         />
       )}
