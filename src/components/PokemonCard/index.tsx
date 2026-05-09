@@ -2,7 +2,7 @@ import { getCardGradient, getTypeBadgeColor } from "./stylesVariants";
 
 import * as S from "./styles";
 
-export interface PokemonCardProps {
+interface PokemonCardProps {
   name: string;
   id: number;
   types: string[];
