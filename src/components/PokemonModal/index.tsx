@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 
 import * as S from "./styles";
 
-import { typeColorsGradient, type Pokemon } from "../../types/pokemon";
+import { type Pokemon } from "../../types/pokemon";
+
+import { typeColorsGradient } from "../../constants/pokemonTypeColors";
 
 import StatBar from "./StatBar";
 import Ability from "./Ability";

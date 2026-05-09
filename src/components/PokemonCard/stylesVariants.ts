@@ -1,4 +1,7 @@
-import { typeColors, typeColorsGradient } from "../../types/pokemon";
+import {
+  typeColors,
+  typeColorsGradient,
+} from "../../constants/pokemonTypeColors";
 
 export function getCardGradient(types: string[]) {
   const primaryType = types[0];
