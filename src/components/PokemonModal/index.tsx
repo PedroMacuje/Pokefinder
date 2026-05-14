@@ -186,8 +186,25 @@ export default function PokemonModal({
           {/* Evolution */}
           <div className={S.EvolutionSection}>
             <h3 className={S.EvolutionTitle}>Evolution</h3>
+            <div className={S.EvolutionChain}>
+              {pokemon.evolution.map((evolution, index) => (
+                <div key={evolution.name} className={S.EvolutionItem}>
+                  <div className={S.EvolutionImageWrapper}>
+                    <img
+                      src={evolution.image}
+                      alt={evolution.name}
+                      className={S.EvolutionImage}
+                    />
+                  </div>
 
-            <p className={S.EvolutionPlaceholder}>Coming soon...</p>
+                  <p className={S.EvolutionName}>{evolution.name}</p>
+
+                  {index < pokemon.evolution.length - 1 && (
+                    <span className={S.EvolutionArrow}>→</span>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

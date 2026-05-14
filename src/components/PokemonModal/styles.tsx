@@ -129,6 +129,45 @@ export const EvolutionTitle = `
   text-white/70
 `;
 
-export const EvolutionPlaceholder = `
-  text-gray-400 text-sm
+export const EvolutionImageWrapper = `
+  relative
+  w-24 h-24
+  rounded-full
+
+  bg-white/10
+  border border-white/20
+
+  backdrop-blur-md
+
+  flex items-center justify-center
+
+  shadow-lg
+
+  transition-all duration-300
+
+  hover:scale-105
+  hover:bg-white/20
+`;
+
+export const EvolutionChain = `
+  flex items-center justify-center
+  flex-wrap gap-4 mt-4
+`;
+
+export const EvolutionItem = `
+  flex items-center gap-4
+`;
+
+export const EvolutionImage = `
+  w-20 h-20
+  object-contain
+  drop-shadow-lg
+`;
+
+export const EvolutionName = `
+  text-sm text-white capitalize
+`;
+
+export const EvolutionArrow = `
+  text-white/70 text-xl
 `;
