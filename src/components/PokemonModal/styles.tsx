@@ -12,8 +12,14 @@ export const ModalOverlay = `
 
 export const ModalContainer = `
   relative z-10
-  w-[95%] max-w-3xl
-  overflow-hidden
+
+  w-[95%]
+  max-w-3xl
+
+  max-h-[90vh]
+  overflow-y-auto
+
+  my-4
 
   bg-white/20
   border border-white/30
@@ -24,6 +30,8 @@ export const ModalContainer = `
 
   shadow-2xl
   animate-scale-in
+
+  overflow-x-hidden
 `;
 
 export const CloseButton = `
