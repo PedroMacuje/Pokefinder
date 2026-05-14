@@ -99,111 +99,110 @@ export default function PokemonModal({
 
       {/* Modal */}
       <div className={S.ModalContainer}>
-        {/* Close button */}
-        <button onClick={onClose} className={S.CloseButton}>
-          ✕
-        </button>
-
-        {/* Background gradient */}
         <div
           className={`
-            ${S.ModalGradient}
+            ${S.ModalScrollContent}
             ${modalGradient}
           `}
-        />
+        >
+          {/* Close button */}
+          <button onClick={onClose} className={S.CloseButton}>
+            ✕
+          </button>
 
-        {/* Dark overlay */}
-        <div className={S.ModalDarkLayer} />
+          {/* Dark overlay */}
+          <div className={S.ModalDarkLayer} />
 
-        {/* Glow */}
-        <div className={S.ModalGlow} />
+          {/* Glow */}
+          <div className={S.ModalGlow} />
 
-        {/* Header */}
-        <div className={S.ModalHeader}>
-          <h2 className={S.PokemonName}>{pokemon.name}</h2>
+          {/* Header */}
+          <div className={S.ModalHeader}>
+            <h2 className={S.PokemonName}>{pokemon.name}</h2>
 
-          <span className={S.PokemonId}>
-            # {String(pokemon.id).padStart(3, "0")}
-          </span>
-        </div>
-
-        {/* Main content */}
-        <div className={S.ModalContent}>
-          {/* Top section */}
-          <div className={S.TopGrid}>
-            {/* Pokemon image */}
-            <div className={S.ImageContainer}>
-              <img
-                src={pokemon.image}
-                alt={pokemon.name}
-                className={S.PokemonImage}
-              />
-            </div>
-
-            {/* Stats */}
-            <div className={S.StatsContainer}>
-              {pokemon.stats.map((stat, index) => (
-                <StatBar
-                  key={stat.name}
-                  animate={animate}
-                  baseStat={stat.value}
-                  index={index}
-                  statLabel={stat.name}
-                />
-              ))}
-            </div>
+            <span className={S.PokemonId}>
+              # {String(pokemon.id).padStart(3, "0")}
+            </span>
           </div>
 
-          {/* Abilities */}
-          <div className={S.AbilitiesSection}>
-            <h3 className={S.SectionTitle}>Abilities</h3>
-
-            <div className={S.AbilitiesGrid}>
-              {/* Standard */}
-              <div className={S.AbilityColumn}>
-                <p className={S.AbilityLabel}>Standard</p>
-
-                <div className={S.AbilityList}>
-                  {normalAbilities.map((ability) => (
-                    <Ability key={ability.name} name={ability.name} />
-                  ))}
-                </div>
+          {/* Main content */}
+          <div className={S.ModalContent}>
+            {/* Top section */}
+            <div className={S.TopGrid}>
+              {/* Pokemon image */}
+              <div className={S.ImageContainer}>
+                <img
+                  src={pokemon.image}
+                  alt={pokemon.name}
+                  className={S.PokemonImage}
+                />
               </div>
 
-              {/* Hidden */}
-              {hiddenAbility && (
+              {/* Stats */}
+              <div className={S.StatsContainer}>
+                {pokemon.stats.map((stat, index) => (
+                  <StatBar
+                    key={stat.name}
+                    animate={animate}
+                    baseStat={stat.value}
+                    index={index}
+                    statLabel={stat.name}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Abilities */}
+            <div className={S.AbilitiesSection}>
+              <h3 className={S.SectionTitle}>Abilities</h3>
+
+              <div className={S.AbilitiesGrid}>
+                {/* Standard */}
                 <div className={S.AbilityColumn}>
-                  <p className={S.HiddenAbilityLabel}>Hidden Ability</p>
+                  <p className={S.AbilityLabel}>Standard</p>
 
                   <div className={S.AbilityList}>
-                    <Ability name={hiddenAbility.name} isHidden />
+                    {normalAbilities.map((ability) => (
+                      <Ability key={ability.name} name={ability.name} />
+                    ))}
                   </div>
                 </div>
-              )}
+
+                {/* Hidden */}
+                {hiddenAbility && (
+                  <div className={S.AbilityColumn}>
+                    <p className={S.HiddenAbilityLabel}>Hidden Ability</p>
+
+                    <div className={S.AbilityList}>
+                      <Ability name={hiddenAbility.name} isHidden />
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
 
-          {/* Evolution */}
-          <div className={S.EvolutionSection}>
-            <h3 className={S.EvolutionTitle}>Evolution</h3>
-            <div className={S.EvolutionChain}>
-              {pokemon.evolution.map((evolution, index) => (
-                <div key={evolution.name} className={S.EvolutionItem}>
-                  <div className={S.EvolutionImageWrapper}>
-                    <img
-                      src={evolution.image}
-                      alt={evolution.name}
-                      className={S.EvolutionImage}
-                    />
+            {/* Evolution */}
+            <div className={S.EvolutionSection}>
+              <h3 className={S.EvolutionTitle}>Evolution</h3>
+              <div className={S.EvolutionChain}>
+                {pokemon.evolution.map((evolution, index) => (
+                  <div key={evolution.name} className={S.EvolutionItem}>
+                    <div className={S.EvolutionImageWrapper}>
+                      <img
+                        src={evolution.image}
+                        alt={evolution.name}
+                        className={S.EvolutionImage}
+                      />
+                    </div>
+
+                    <p className={S.EvolutionName}>{evolution.name}</p>
+
+                    {index < pokemon.evolution.length - 1 && (
+                      <span className={S.EvolutionArrow}>→</span>
+                    )}
                   </div>
-
-                  <p className={S.EvolutionName}>{evolution.name}</p>
-
-                  {index < pokemon.evolution.length - 1 && (
-                    <span className={S.EvolutionArrow}>→</span>
-                  )}
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>

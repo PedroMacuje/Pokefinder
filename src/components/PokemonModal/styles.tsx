@@ -16,22 +16,33 @@ export const ModalContainer = `
   w-[95%]
   max-w-3xl
 
-  max-h-[90vh]
-  overflow-y-auto
-
   my-4
+
+  rounded-2xl
+
+  overflow-hidden
 
   bg-white/20
   border border-white/30
   backdrop-blur-md
 
-  rounded-2xl
-  p-6
-
   shadow-2xl
   animate-scale-in
+`;
 
+export const ModalScrollContent = `
+  relative
+
+  min-h-full
+
+  max-h-[90vh]
+
+  overflow-y-auto
   overflow-x-hidden
+
+  p-6
+
+  bg-gradient-to-br
 `;
 
 export const CloseButton = `
@@ -43,19 +54,21 @@ export const CloseButton = `
 export const ModalGradient = `
   absolute inset-0
   bg-gradient-to-br
-  opacity-20
+  opacity-60
 `;
 
 export const ModalDarkLayer = `
-  absolute inset-0
-  rounded-2xl
+  fixed inset-0
   bg-black/20
+  pointer-events-none
+  z-0
 `;
 
 export const ModalGlow = `
-  absolute inset-0
-  bg-white/10
+  fixed inset-0
+  bg-white/5
   backdrop-blur-xl
+  pointer-events-none
 `;
 
 export const ModalHeader = `
