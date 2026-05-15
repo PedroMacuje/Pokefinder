@@ -52,7 +52,7 @@ export default function Home() {
     <div className={S.HomeContainer}>
       <h1 className={S.HomeTitle}>PokéFinder</h1>
       <SearchBar onChange={setSearchTerm} value={searchTerm} />
-      <TypeFilter onSelect={setSelectedType} selectedType={selectedType} />
+      <TypeFilter selectedType={selectedType} onSelect={setSelectedType} />
       <div className={S.PokemonGrid}>
         {filteredPokemons.map((pokemon, index) => (
           <div
