@@ -5,91 +5,62 @@ import type { PokemonCardData } from "../types/Pokemon/card";
 import { getPokemonList, getPokemonCardData } from "../services/Pokemon";
 
 export function usePokemon() {
-  // Main Pokémon list
   const [pokemons, setPokemons] = useState<PokemonCardData[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Pagination offset
-  const [offset, setOffset] = useState(0);
+  const offset = useRef(0);
+  const cache = useRef<Map<string, PokemonCardData>>(new Map()); // Stores searched pokemons
+  const isFetching = useRef(false); // Prevents simultaneous requests
 
-  // Prevents duplicated requests
-  const [isFetching, setIsFetching] = useState(false);
+  async function fetchPokemon(name: string) {
+    const cached = cache.current.get(name);
 
-  // In-memory cache that persists across renders without triggering re-renders
-  const cache = useRef<Map<string, PokemonCardData>>(new Map());
+    if (cached) return cached;
 
-  // Fetches Pokémon details with caching.
-  const fetchWithCache = useCallback(
-    async (name: string): Promise<PokemonCardData> => {
-      const cached = cache.current.get(name);
+    const pokemon = await getPokemonCardData(name);
 
-      if (cached) return cached;
+    cache.current.set(name, pokemon);
 
-      const pokemon = await getPokemonCardData(name);
+    return pokemon;
+  }
 
-      cache.current.set(name, pokemon);
+  async function fetchBatch(offset: number) {
+    const pokemonList = await getPokemonList(20, offset);
 
-      return pokemon;
-    },
-    [],
-  );
+    return Promise.all(
+      pokemonList.map((pokemon) => fetchPokemon(pokemon.name)),
+    );
+  }
 
-  //Fetches a batch of Pokémon and enriches them with details.
-  const fetchBatch = useCallback(
-    async (limit: number, currentOffset: number) => {
-      const pokemonList = await getPokemonList(limit, currentOffset);
-
-      const pokemonData = await Promise.all(
-        pokemonList.map((pokemon) => fetchWithCache(pokemon.name)),
-      );
-
-      return pokemonData;
-    },
-    [fetchWithCache],
-  );
-
-  // Loads the next batch of Pokémon (infinite scroll).
+  // Controls infinite scroll/pagination appending more pokemon to the list
   const loadMore = useCallback(async () => {
-    if (isFetching) return;
+    if (isFetching.current) return;
 
-    setIsFetching(true);
+    isFetching.current = true;
+
+    setIsLoading(true);
 
     try {
-      const newPokemons = await fetchBatch(20, offset);
+      const newPokemons = await fetchBatch(offset.current);
 
-      setPokemons((prev) => {
-        const existing = new Set(prev.map((p) => p.name));
+      setPokemons((prev) => [...prev, ...newPokemons]);
 
-        const filtered = newPokemons.filter((p) => !existing.has(p.name));
-
-        return [...prev, ...filtered];
-      });
-
-      setOffset((prev) => prev + 20);
+      offset.current += 20;
     } finally {
-      setIsFetching(false);
+      isFetching.current = false;
+
+      setIsLoading(false);
     }
-  }, [offset, isFetching, fetchBatch]);
+  }, []);
 
-  // Initial data load (runs once on mount).
+  // First load
   useEffect(() => {
-    const init = async () => {
-      setIsFetching(true);
-
-      try {
-        const initialPokemons = await fetchBatch(20, 0);
-        setPokemons(initialPokemons);
-        setOffset(20);
-      } finally {
-        setIsFetching(false);
-      }
-    };
-
-    init();
-  }, [fetchBatch]);
+    loadMore();
+  }, [loadMore]);
 
   return {
     pokemons,
-    isFetching,
+    isLoading,
     loadMore,
   };
 }
