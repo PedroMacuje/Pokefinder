@@ -10,7 +10,7 @@ import TypeFilter from "../../components/TypeFilter";
 import * as S from "./styles";
 
 export default function Home() {
-  const { pokemons, isFetching, loadMore } = usePokemon();
+  const { pokemons, isLoading, loadMore } = usePokemon();
 
   const [selectPokemon, setSelectPokemon] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -73,7 +73,7 @@ export default function Home() {
         ))}
       </div>
 
-      {isFetching && <p className={S.LoadingText}>Loading...</p>}
+      {isLoading && <p className={S.LoadingText}>Loading...</p>}
 
       <div ref={loadMoreRef} className={S.ObserverTrigger} />
 
