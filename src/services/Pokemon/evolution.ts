@@ -1,39 +1,14 @@
 import axios from "axios";
 import { api } from "../api";
 
-interface PokemonDetailsResponse {
-  species: {
-    url: string;
-  };
-}
-
-interface PokemonSpeciesResponse {
-  evolution_chain: {
-    url: string;
-  };
-}
-
-interface EvolutionChainResponse {
-  chain: EvolutionNode;
-}
-
-interface EvolutionNode {
-  species: {
-    name: string;
-  };
-
-  evolves_to: EvolutionNode[];
-}
-
-interface PokemonResponse {
-  id: number;
-}
-
-export interface EvolutionPokemon {
-  id: number;
-  name: string;
-  image: string;
-}
+import type {
+  EvolutionChainResponse,
+  EvolutionNode,
+  EvolutionPokemon,
+  PokemonDetailsResponse,
+  PokemonResponse,
+  PokemonSpeciesResponse,
+} from "../../types/evolution";
 
 async function flattenEvolutionChain(
   node: EvolutionNode,

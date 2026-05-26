@@ -1,13 +1,6 @@
 import { api } from "./api";
 
-type AbilityResponse = {
-  effect_entries: {
-    effect: string;
-    language: {
-      name: string;
-    };
-  }[];
-};
+import type { AbilityResponse } from "../types/ability";
 
 const abilityCache = new Map<string, string>();
 

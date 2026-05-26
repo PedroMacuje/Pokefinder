@@ -4,8 +4,8 @@ import { usePokemon } from "../../hooks/usePokemon";
 
 import { getPokemonCardData, getPokemonIndex } from "../../services/Pokemon";
 
-import type { PokemonIndexItem } from "../../types/Pokemon/api";
-import type { PokemonCardData } from "../../types/Pokemon/card";
+import type { PokemonIndexItem } from "../../types/api";
+import type { PokemonCardData } from "../../types/card";
 
 import PokemonCard from "../../components/PokemonCard";
 import PokemonModal from "../../components/PokemonModal";

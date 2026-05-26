@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 
-import type { PokemonCardData } from "../types/Pokemon/card";
+import type { PokemonCardData } from "../types/card";
 
 import { getPokemonList, getPokemonCardData } from "../services/Pokemon";
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import type { PokemonModalData } from "../../types/Pokemon/modal";
+import type { PokemonModalData } from "../../types/modal";
 
 import { getPokemonModalData } from "../../services/Pokemon";
 

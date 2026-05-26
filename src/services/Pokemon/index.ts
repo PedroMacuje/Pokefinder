@@ -4,11 +4,11 @@ import type {
   PokemonListResponse,
   PokemonApiResponse,
   PokemonIndexItem,
-} from "../../types/Pokemon/api";
+} from "../../types/api";
 
-import type { PokemonCardData } from "../../types/Pokemon/card";
+import type { PokemonCardData } from "../../types/card";
 
-import type { PokemonModalData } from "../../types/Pokemon/modal";
+import type { PokemonModalData } from "../../types/modal";
 import { getPokemonEvolution } from "./evolution";
 
 export async function getPokemonList(limit = 20, offset = 0) {
