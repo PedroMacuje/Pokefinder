@@ -3,6 +3,7 @@ import axios from "axios";
 import type {
   PokemonListResponse,
   PokemonApiResponse,
+  PokemonIndexItem,
 } from "../../types/Pokemon/api";
 
 import type { PokemonCardData } from "../../types/Pokemon/card";
@@ -64,4 +65,13 @@ export async function getPokemonModalData(
       isHidden: a.is_hidden,
     })),
   };
+}
+
+export async function getPokemonIndex(): Promise<PokemonIndexItem[]> {
+  const response = await api.get("/pokemon", {
+    params: {
+      limit: 10000,
+    },
+  });
+  return response.data.results;
 }

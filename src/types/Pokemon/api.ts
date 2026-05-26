@@ -1,3 +1,8 @@
+export interface PokemonIndexItem {
+  name: string;
+  url: string;
+}
+
 export interface PokemonListResponse {
   results: PokemonListItem[];
 }
