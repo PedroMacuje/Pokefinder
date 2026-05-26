@@ -1,4 +1,4 @@
-import axios from "axios";
+import { api } from "../api";
 
 import type {
   PokemonListResponse,
@@ -10,10 +10,6 @@ import type { PokemonCardData } from "../../types/Pokemon/card";
 
 import type { PokemonModalData } from "../../types/Pokemon/modal";
 import { getPokemonEvolution } from "./evolution";
-
-const api = axios.create({
-  baseURL: "https://pokeapi.co/api/v2/",
-});
 
 export async function getPokemonList(limit = 20, offset = 0) {
   const response = await api.get<PokemonListResponse>("/pokemon", {

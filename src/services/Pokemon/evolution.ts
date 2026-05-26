@@ -1,4 +1,5 @@
 import axios from "axios";
+import { api } from "../api";
 
 interface PokemonDetailsResponse {
   species: {
@@ -33,10 +34,6 @@ export interface EvolutionPokemon {
   name: string;
   image: string;
 }
-
-const api = axios.create({
-  baseURL: "https://pokeapi.co/api/v2/",
-});
 
 async function flattenEvolutionChain(
   node: EvolutionNode,

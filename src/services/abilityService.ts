@@ -1,3 +1,5 @@
+import { api } from "./api";
+
 type AbilityResponse = {
   effect_entries: {
     effect: string;
@@ -16,7 +18,7 @@ export async function getAbilityDescription(name: string): Promise<string> {
   }
 
   try {
-    const response = await fetch(`https://pokeapi.co/api/v2/ability/${name}`);
+    const response = await fetch(`${api}/ability/${name}`);
 
     const data: AbilityResponse = await response.json();
 
