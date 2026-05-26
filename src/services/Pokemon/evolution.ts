@@ -1,5 +1,11 @@
 import axios from "axios";
 
+interface PokemonDetailsResponse {
+  species: {
+    url: string;
+  };
+}
+
 interface PokemonSpeciesResponse {
   evolution_chain: {
     url: string;
@@ -32,12 +38,10 @@ const api = axios.create({
   baseURL: "https://pokeapi.co/api/v2/",
 });
 
-// Recursively flattens the evolution tree into a simple array.
 async function flattenEvolutionChain(
   node: EvolutionNode,
   result: EvolutionPokemon[] = [],
 ): Promise<EvolutionPokemon[]> {
-  // Fetch pokemon ID
   const pokemonResponse = await api.get<PokemonResponse>(
     `/pokemon/${node.species.name}`,
   );
@@ -50,24 +54,33 @@ async function flattenEvolutionChain(
     image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonId}.png`,
   });
 
-  if (node.evolves_to && node.evolves_to.length > 0) {
-    await flattenEvolutionChain(node.evolves_to[0], result);
+  // Counts for multiple evolution lines
+  for (const evolution of node.evolves_to) {
+    await flattenEvolutionChain(evolution, result);
   }
 
   return result;
 }
 
-// Fetches the Pokémon evolution chain.
+// Fetches Pokémon evolution chain.
 export async function getPokemonEvolution(
   pokemonName: string,
 ): Promise<EvolutionPokemon[]> {
-  const speciesResponse = await api.get<PokemonSpeciesResponse>(
-    `/pokemon-species/${pokemonName}`,
+  // Get base species URL from pokemon endpoint
+  const pokemonResponse = await api.get<PokemonDetailsResponse>(
+    `/pokemon/${pokemonName}`,
   );
 
+  // Fetch species
+  const speciesResponse = await axios.get<PokemonSpeciesResponse>(
+    pokemonResponse.data.species.url,
+  );
+
+  // Fetch evolution chain
   const evolutionResponse = await axios.get<EvolutionChainResponse>(
     speciesResponse.data.evolution_chain.url,
   );
 
-  return await flattenEvolutionChain(evolutionResponse.data.chain);
+  // Flatten evolution tree
+  return flattenEvolutionChain(evolutionResponse.data.chain);
 }
