@@ -6,6 +6,7 @@ import { getPokemonCardData, getPokemonIndex } from "../../services/Pokemon";
 
 import type { PokemonIndexItem } from "../../types/api";
 import type { PokemonCardData } from "../../types/card";
+import type { PokemonType } from "../../constants/pokemonTypes";
 
 import PokemonCard from "../../components/PokemonCard";
 import PokemonModal from "../../components/PokemonModal";
@@ -24,7 +25,7 @@ export default function Home() {
   const [isSearching, setIsSearching] = useState(false);
 
   // Filters
-  const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [selectedType, setSelectedType] = useState<PokemonType | null>(null);
 
   // Modal
   const [selectPokemon, setSelectPokemon] = useState<string | null>(null);

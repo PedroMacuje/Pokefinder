@@ -1,11 +1,14 @@
 import TypeFilterItem from "./TypeFilterItem";
 
-import { pokemonTypes } from "../../constants/pokemonTypes";
+import {
+  pokemonTypes,
+  type PokemonType,
+} from "../../constants/pokemonTypes";
 
 interface TypeFilterProps {
-  selectedType: string | null;
+  selectedType: PokemonType | null;
 
-  onSelect: (type: string | null) => void;
+  onSelect: (type: PokemonType | null) => void;
 }
 
 export default function TypeFilter({
@@ -23,7 +26,7 @@ export default function TypeFilter({
           max-w-xl
         "
       >
-        {Object.keys(pokemonTypes).map((type) => (
+        {(Object.keys(pokemonTypes) as PokemonType[]).map((type) => (
           <TypeFilterItem
             key={type}
             type={type}

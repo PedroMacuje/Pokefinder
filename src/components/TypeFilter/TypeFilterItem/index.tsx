@@ -1,11 +1,14 @@
-import { pokemonTypes } from "../../../constants/pokemonTypes";
+import {
+  pokemonTypes,
+  type PokemonType,
+} from "../../../constants/pokemonTypes";
 
 import * as S from "./styles";
 
 interface TypeFilterItemProps {
-  type: string;
+  type: PokemonType;
   active: boolean;
-  onClick: (type: string) => void;
+  onClick: (type: PokemonType) => void;
 }
 
 export default function TypeFilterItem({

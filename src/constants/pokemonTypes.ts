@@ -111,3 +111,5 @@ export const pokemonTypes = {
     icon: WaterIcon,
   },
 };
+
+export type PokemonType = keyof typeof pokemonTypes;
