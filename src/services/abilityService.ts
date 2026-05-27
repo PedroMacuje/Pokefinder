@@ -5,23 +5,20 @@ import type { AbilityResponse } from "../types/ability";
 const abilityCache = new Map<string, string>();
 
 export async function getAbilityDescription(name: string): Promise<string> {
-  // Cache hit
-  if (abilityCache.has(name)) {
-    return abilityCache.get(name)!;
+  const cachedDescription = abilityCache.get(name);
+
+  if (cachedDescription) {
+    return cachedDescription;
   }
 
   try {
-    const response = await fetch(`${api}/ability/${name}`);
+    const response = await api.get<AbilityResponse>(`/ability/${name}`);
 
-    const data: AbilityResponse = await response.json();
+    const entry = response.data.effect_entries.find(
+      (effectEntry) => effectEntry.language.name === "en",
+    );
 
-    if (!data.effect_entries) {
-      return "No description available";
-    }
-
-    const entry = data.effect_entries.find((e) => e.language.name === "en");
-
-    const description = entry?.effect || "No description available";
+    const description = entry?.effect ?? "No description available";
 
     abilityCache.set(name, description);
 

@@ -9,28 +9,7 @@ export function usePokemon() {
   const [isLoading, setIsLoading] = useState(false);
 
   const offset = useRef(0);
-  const cache = useRef<Map<string, PokemonCardData>>(new Map()); // Stores searched pokemons
   const isFetching = useRef(false); // Prevents simultaneous requests
-
-  async function fetchPokemon(name: string) {
-    const cached = cache.current.get(name);
-
-    if (cached) return cached;
-
-    const pokemon = await getPokemonCardData(name);
-
-    cache.current.set(name, pokemon);
-
-    return pokemon;
-  }
-
-  async function fetchBatch(offset: number) {
-    const pokemonList = await getPokemonList(20, offset);
-
-    return Promise.all(
-      pokemonList.map((pokemon) => fetchPokemon(pokemon.name)),
-    );
-  }
 
   // Controls infinite scroll/pagination appending more pokemon to the list
   const loadMore = useCallback(async () => {
@@ -41,7 +20,10 @@ export function usePokemon() {
     setIsLoading(true);
 
     try {
-      const newPokemons = await fetchBatch(offset.current);
+      const pokemonList = await getPokemonList(20, offset.current);
+      const newPokemons = await Promise.all(
+        pokemonList.map((pokemon) => getPokemonCardData(pokemon.name)),
+      );
 
       setPokemons((prev) => [...prev, ...newPokemons]);
 

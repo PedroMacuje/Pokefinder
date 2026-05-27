@@ -9,7 +9,53 @@ import type {
 import type { PokemonCardData } from "../../types/card";
 
 import type { PokemonModalData } from "../../types/modal";
-import { getPokemonEvolution } from "./evolution";
+import { getPokemonEvolutionBySpeciesUrl } from "./evolution";
+
+const pokemonCache = new Map<string, PokemonApiResponse>();
+const pokemonRequestCache = new Map<string, Promise<PokemonApiResponse>>();
+
+function getPokemonCacheKey(nameOrId: string | number) {
+  return String(nameOrId).toLowerCase();
+}
+
+async function getPokemonDetails(
+  nameOrId: string | number,
+): Promise<PokemonApiResponse> {
+  const cacheKey = getPokemonCacheKey(nameOrId);
+  const cachedPokemon = pokemonCache.get(cacheKey);
+
+  if (cachedPokemon) {
+    return cachedPokemon;
+  }
+
+  const pendingPokemonRequest = pokemonRequestCache.get(cacheKey);
+
+  if (pendingPokemonRequest) {
+    return pendingPokemonRequest;
+  }
+
+  const request = api
+    .get<PokemonApiResponse>(`/pokemon/${nameOrId}`)
+    .then((response) => {
+      const pokemon = response.data;
+
+      pokemonCache.set(cacheKey, pokemon);
+      pokemonCache.set(String(pokemon.id), pokemon);
+      pokemonCache.set(pokemon.name.toLowerCase(), pokemon);
+
+      pokemonRequestCache.delete(cacheKey);
+
+      return pokemon;
+    })
+    .catch((error) => {
+      pokemonRequestCache.delete(cacheKey);
+      throw error;
+    });
+
+  pokemonRequestCache.set(cacheKey, request);
+
+  return request;
+}
 
 export async function getPokemonList(limit = 20, offset = 0) {
   const response = await api.get<PokemonListResponse>("/pokemon", {
@@ -22,9 +68,7 @@ export async function getPokemonList(limit = 20, offset = 0) {
 export async function getPokemonCardData(
   name: string,
 ): Promise<PokemonCardData> {
-  const response = await api.get<PokemonApiResponse>(`/pokemon/${name}`);
-
-  const pokemon = response.data;
+  const pokemon = await getPokemonDetails(name);
 
   return {
     id: pokemon.id,
@@ -37,11 +81,9 @@ export async function getPokemonCardData(
 export async function getPokemonModalData(
   name: string,
 ): Promise<PokemonModalData> {
-  const response = await api.get<PokemonApiResponse>(`/pokemon/${name}`);
+  const pokemon = await getPokemonDetails(name);
 
-  const pokemon = response.data;
-
-  const evolution = await getPokemonEvolution(pokemon.name);
+  const evolution = await getPokemonEvolutionBySpeciesUrl(pokemon.species.url);
 
   return {
     id: pokemon.id,

@@ -17,6 +17,9 @@ export interface PokemonApiResponse {
   name: string;
   stats: PokemonStat[];
   abilities: PokemonAbility[];
+  species: {
+    url: string;
+  };
 
   types: {
     type: {

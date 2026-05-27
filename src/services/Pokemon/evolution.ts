@@ -5,7 +5,6 @@ import type {
   EvolutionChainResponse,
   EvolutionNode,
   EvolutionPokemon,
-  PokemonDetailsResponse,
   PokemonResponse,
   PokemonSpeciesResponse,
 } from "../../types/evolution";
@@ -26,7 +25,6 @@ async function flattenEvolutionChain(
     image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonId}.png`,
   });
 
-  // Counts for multiple evolution lines
   for (const evolution of node.evolves_to) {
     await flattenEvolutionChain(evolution, result);
   }
@@ -34,25 +32,14 @@ async function flattenEvolutionChain(
   return result;
 }
 
-// Fetches Pokémon evolution chain.
-export async function getPokemonEvolution(
-  pokemonName: string,
+export async function getPokemonEvolutionBySpeciesUrl(
+  speciesUrl: string,
 ): Promise<EvolutionPokemon[]> {
-  // Get base species URL from pokemon endpoint
-  const pokemonResponse = await api.get<PokemonDetailsResponse>(
-    `/pokemon/${pokemonName}`,
-  );
+  const speciesResponse = await axios.get<PokemonSpeciesResponse>(speciesUrl);
 
-  // Fetch species
-  const speciesResponse = await axios.get<PokemonSpeciesResponse>(
-    pokemonResponse.data.species.url,
-  );
-
-  // Fetch evolution chain
   const evolutionResponse = await axios.get<EvolutionChainResponse>(
     speciesResponse.data.evolution_chain.url,
   );
 
-  // Flatten evolution tree
   return flattenEvolutionChain(evolutionResponse.data.chain);
 }

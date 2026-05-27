@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { getAbilityDescription } from "../../../services/abilityService";
 
@@ -13,11 +13,13 @@ interface AbilityProps {
 
 export default function Ability({ name, isHidden }: AbilityProps) {
   const [open, setOpen] = useState(false);
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   const containerRef = useRef<HTMLDivElement>(null);
+  const isMountedRef = useRef(true);
 
   async function handleClick() {
-    // Toggle tooltip
     if (open) {
       setOpen(false);
       return;
@@ -25,12 +27,25 @@ export default function Ability({ name, isHidden }: AbilityProps) {
 
     setOpen(true);
 
-    const description = await getAbilityDescription(name);
+    if (description !== null) {
+      return;
+    }
 
-    setDescription(description);
+    setIsLoading(true);
+
+    try {
+      const nextDescription = await getAbilityDescription(name);
+
+      if (isMountedRef.current) {
+        setDescription(nextDescription);
+      }
+    } finally {
+      if (isMountedRef.current) {
+        setIsLoading(false);
+      }
+    }
   }
 
-  // Close tooltip on outside click
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (!containerRef.current?.contains(e.target as Node)) {
@@ -42,6 +57,14 @@ export default function Ability({ name, isHidden }: AbilityProps) {
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+
+    return () => {
+      isMountedRef.current = false;
     };
   }, []);
 
@@ -57,7 +80,13 @@ export default function Ability({ name, isHidden }: AbilityProps) {
         {name}
       </button>
 
-      {open && <div className={S.AbilityTooltip}>{description}</div>}
+      {open && (
+        <div className={S.AbilityTooltip}>
+          {isLoading
+            ? "Loading..."
+            : (description ?? "No description available")}
+        </div>
+      )}
     </div>
   );
 }
