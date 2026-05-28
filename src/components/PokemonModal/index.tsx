@@ -20,16 +20,10 @@ export default function PokemonModal({
   pokemonName,
   onClose,
 }: PokemonModalProps) {
-  // Full modal data
   const [pokemon, setPokemon] = useState<PokemonModalData | null>(null);
-
-  // Loading state
   const [isLoading, setIsLoading] = useState(true);
-
-  // Stats animation state
   const [animate, setAnimate] = useState(false);
 
-  // Fetch modal data
   useEffect(() => {
     const fetchPokemon = async () => {
       setIsLoading(true);
@@ -46,7 +40,6 @@ export default function PokemonModal({
     fetchPokemon();
   }, [pokemonName]);
 
-  // Close modal on ESC
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -61,7 +54,6 @@ export default function PokemonModal({
     };
   }, [onClose]);
 
-  // Trigger stats animation
   useEffect(() => {
     const timeout = setTimeout(() => {
       setAnimate(true);
@@ -70,7 +62,6 @@ export default function PokemonModal({
     return () => clearTimeout(timeout);
   }, [pokemon]);
 
-  // Loading state
   if (isLoading || !pokemon) {
     return (
       <div className={S.ModalWrapper}>
@@ -83,40 +74,32 @@ export default function PokemonModal({
     );
   }
 
-  // Abilities sorting logic
   const normalAbilities = pokemon.abilities.filter(
     (ability) => !ability.isHidden,
   );
   const hiddenAbility = pokemon.abilities.find((ability) => ability.isHidden);
 
-  // Modal background gradient
   const modalGradient = getModalGradient(pokemon.types);
 
   return (
     <div className={S.ModalWrapper}>
-      {/* Overlay */}
       <div onClick={onClose} className={S.ModalOverlay} />
 
-      {/* Modal */}
       <div className={S.ModalContainer}>
+        <div className={S.ModalDarkLayer} />
+        <div className={S.ModalGlow} />
+
         <div
           className={`
             ${S.ModalScrollContent}
+            modal-scrollbar
             ${modalGradient}
           `}
         >
-          {/* Close button */}
           <button onClick={onClose} className={S.CloseButton}>
-            ✕
+            x
           </button>
 
-          {/* Dark overlay */}
-          <div className={S.ModalDarkLayer} />
-
-          {/* Glow */}
-          <div className={S.ModalGlow} />
-
-          {/* Header */}
           <div className={S.ModalHeader}>
             <h2 className={S.PokemonName}>{pokemon.name}</h2>
 
@@ -125,11 +108,8 @@ export default function PokemonModal({
             </span>
           </div>
 
-          {/* Main content */}
           <div className={S.ModalContent}>
-            {/* Top section */}
             <div className={S.TopGrid}>
-              {/* Pokemon image */}
               <div className={S.ImageContainer}>
                 <img
                   src={pokemon.image}
@@ -138,7 +118,6 @@ export default function PokemonModal({
                 />
               </div>
 
-              {/* Stats */}
               <div className={S.StatsContainer}>
                 {pokemon.stats.map((stat, index) => (
                   <StatBar
@@ -152,12 +131,10 @@ export default function PokemonModal({
               </div>
             </div>
 
-            {/* Abilities */}
             <div className={S.AbilitiesSection}>
               <h3 className={S.SectionTitle}>Abilities</h3>
 
               <div className={S.AbilitiesGrid}>
-                {/* Standard */}
                 <div className={S.AbilityColumn}>
                   <p className={S.AbilityLabel}>Standard</p>
 
@@ -168,7 +145,6 @@ export default function PokemonModal({
                   </div>
                 </div>
 
-                {/* Hidden */}
                 {hiddenAbility && (
                   <div className={S.AbilityColumn}>
                     <p className={S.HiddenAbilityLabel}>Hidden Ability</p>
@@ -181,7 +157,6 @@ export default function PokemonModal({
               </div>
             </div>
 
-            {/* Evolution */}
             <div className={S.EvolutionSection}>
               <h3 className={S.EvolutionTitle}>Evolution</h3>
               <div className={S.EvolutionChain}>
@@ -198,7 +173,7 @@ export default function PokemonModal({
                     <p className={S.EvolutionName}>{evolution.name}</p>
 
                     {index < pokemon.evolution.length - 1 && (
-                      <span className={S.EvolutionArrow}>→</span>
+                      <span className={S.EvolutionArrow}>{"->"}</span>
                     )}
                   </div>
                 ))}

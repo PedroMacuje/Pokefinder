@@ -32,12 +32,13 @@ export const ModalContainer = `
 
 export const ModalScrollContent = `
   relative
+  isolate
 
   min-h-full
 
   max-h-[90vh]
 
-  overflow-y-auto
+  overflow-y-scroll
   overflow-x-hidden
 
   p-6
@@ -47,6 +48,7 @@ export const ModalScrollContent = `
 
 export const CloseButton = `
   absolute top-3 right-3
+  z-20
   text-gray-500
   hover:text-black
 `;
@@ -58,14 +60,15 @@ export const ModalGradient = `
 `;
 
 export const ModalDarkLayer = `
-  fixed inset-0
+  absolute inset-0
   bg-black/20
   pointer-events-none
   z-0
 `;
 
 export const ModalGlow = `
-  fixed inset-0
+  absolute inset-0
+  z-0
   bg-white/5
   backdrop-blur-xl
   pointer-events-none
