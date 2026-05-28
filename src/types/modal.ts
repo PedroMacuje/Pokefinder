@@ -1,9 +1,11 @@
+import type { EvolutionPokemon } from "./evolution";
+
 export interface PokemonModalData {
   id: number;
   name: string;
   image: string;
   types: string[];
-  evolution: EvolutionPokemon[];
+  evolution: EvolutionPokemon;
   stats: PokemonStats[];
   abilities: PokemonAbilitites[];
 }
@@ -17,9 +19,4 @@ export interface PokemonAbilitites {
   name: string;
   isHidden: boolean;
   description?: string;
-}
-
-export interface EvolutionPokemon {
-  name: string;
-  image: string;
 }

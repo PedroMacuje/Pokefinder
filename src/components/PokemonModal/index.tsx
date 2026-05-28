@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import type { EvolutionPokemon } from "../../types/evolution";
 import type { PokemonModalData } from "../../types/modal";
 
 import { getPokemonModalData } from "../../services/Pokemon";
@@ -10,6 +11,45 @@ import StatBar from "./StatBar";
 import Ability from "./Ability";
 
 import * as S from "./styles";
+
+function EvolutionBranch({ pokemon }: { pokemon: EvolutionPokemon }) {
+  const hasChildren = pokemon.evolvesTo.length > 0;
+  const isBranching = pokemon.evolvesTo.length > 1;
+
+  return (
+    <div className={S.EvolutionBranch}>
+      <div className={S.EvolutionCard}>
+        <p className={S.EvolutionName}>{pokemon.name}</p>
+
+        <div className={S.EvolutionImageWrapper}>
+          <img
+            src={pokemon.image}
+            alt={pokemon.name}
+            className={S.EvolutionImage}
+          />
+        </div>
+      </div>
+
+      {hasChildren && (
+        <>
+          <span className={S.EvolutionConnector}>{"->"}</span>
+
+          <div
+            className={
+              isBranching
+                ? S.EvolutionChildrenColumn
+                : S.EvolutionChildrenRow
+            }
+          >
+            {pokemon.evolvesTo.map((evolution) => (
+              <EvolutionBranch key={evolution.id} pokemon={evolution} />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
 
 interface PokemonModalProps {
   pokemonName: string;
@@ -160,23 +200,7 @@ export default function PokemonModal({
             <div className={S.EvolutionSection}>
               <h3 className={S.EvolutionTitle}>Evolution</h3>
               <div className={S.EvolutionChain}>
-                {pokemon.evolution.map((evolution, index) => (
-                  <div key={evolution.name} className={S.EvolutionItem}>
-                    <div className={S.EvolutionImageWrapper}>
-                      <img
-                        src={evolution.image}
-                        alt={evolution.name}
-                        className={S.EvolutionImage}
-                      />
-                    </div>
-
-                    <p className={S.EvolutionName}>{evolution.name}</p>
-
-                    {index < pokemon.evolution.length - 1 && (
-                      <span className={S.EvolutionArrow}>{"->"}</span>
-                    )}
-                  </div>
-                ))}
+                <EvolutionBranch pokemon={pokemon.evolution} />
               </div>
             </div>
           </div>

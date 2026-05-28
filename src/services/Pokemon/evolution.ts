@@ -9,37 +9,35 @@ import type {
   PokemonSpeciesResponse,
 } from "../../types/evolution";
 
-async function flattenEvolutionChain(
+async function buildEvolutionTree(
   node: EvolutionNode,
-  result: EvolutionPokemon[] = [],
-): Promise<EvolutionPokemon[]> {
+): Promise<EvolutionPokemon> {
   const pokemonResponse = await api.get<PokemonResponse>(
     `/pokemon/${node.species.name}`,
   );
 
   const pokemonId = pokemonResponse.data.id;
 
-  result.push({
+  const evolvesTo = await Promise.all(
+    node.evolves_to.map((evolution) => buildEvolutionTree(evolution)),
+  );
+
+  return {
     id: pokemonId,
     name: node.species.name,
     image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonId}.png`,
-  });
-
-  for (const evolution of node.evolves_to) {
-    await flattenEvolutionChain(evolution, result);
-  }
-
-  return result;
+    evolvesTo,
+  };
 }
 
 export async function getPokemonEvolutionBySpeciesUrl(
   speciesUrl: string,
-): Promise<EvolutionPokemon[]> {
+): Promise<EvolutionPokemon> {
   const speciesResponse = await axios.get<PokemonSpeciesResponse>(speciesUrl);
 
   const evolutionResponse = await axios.get<EvolutionChainResponse>(
     speciesResponse.data.evolution_chain.url,
   );
 
-  return flattenEvolutionChain(evolutionResponse.data.chain);
+  return buildEvolutionTree(evolutionResponse.data.chain);
 }

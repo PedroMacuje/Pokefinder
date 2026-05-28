@@ -174,12 +174,40 @@ export const EvolutionImageWrapper = `
 `;
 
 export const EvolutionChain = `
+  flex flex-col items-center justify-center
+  gap-6 mt-4
+`;
+
+export const EvolutionBranch = `
   flex items-center justify-center
-  flex-wrap gap-4 mt-4
+`;
+
+export const EvolutionCard = `
+  flex flex-col items-center gap-2
+`;
+
+export const EvolutionLine = `
+  flex items-center justify-center gap-4
+`;
+
+export const EvolutionBranchColumn = `
+  flex flex-col items-center gap-2
 `;
 
 export const EvolutionItem = `
-  flex items-center gap-4
+  flex flex-col items-center gap-2
+`;
+
+export const EvolutionChildrenRow = `
+  flex items-center justify-center gap-4
+`;
+
+export const EvolutionChildrenColumn = `
+  flex flex-col items-center gap-6
+`;
+
+export const EvolutionConnector = `
+  text-white/70 text-xl
 `;
 
 export const EvolutionImage = `
