@@ -179,7 +179,7 @@ export const EvolutionChain = `
 `;
 
 export const EvolutionBranch = `
-  flex items-center justify-center
+  flex items-center justify-center gap-8
 `;
 
 export const EvolutionCard = `
@@ -199,15 +199,15 @@ export const EvolutionItem = `
 `;
 
 export const EvolutionChildrenRow = `
-  flex items-center justify-center gap-4
+  flex items-center justify-center gap-8
 `;
 
 export const EvolutionChildrenColumn = `
-  flex flex-col items-center gap-6
+  flex flex-col items-center gap-10
 `;
 
 export const EvolutionConnector = `
-  text-white/70 text-xl
+  text-white/70 text-xl my-1
 `;
 
 export const EvolutionImage = `

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { LoaderCircle, SearchX } from "lucide-react";
 
 import { usePokemon } from "../../hooks/usePokemon";
 
@@ -18,40 +19,31 @@ import * as S from "./styles";
 export default function Home() {
   const { pokemons, isLoading, loadMore } = usePokemon();
 
-  // Search
   const [pokemonIndex, setPokemonIndex] = useState<PokemonIndexItem[]>([]);
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState<PokemonCardData[]>([]);
   const [isSearching, setIsSearching] = useState(false);
 
-  // Filters
   const [selectedType, setSelectedType] = useState<PokemonType | null>(null);
 
-  // Modal
   const [selectPokemon, setSelectPokemon] = useState<string | null>(null);
 
-  // Refs
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
-
   const searchTimeoutRef = useRef<number | null>(null);
 
-  // Search logic
   const handleSearch = useCallback(
     async (value: string) => {
       const formatedValue = value.toLowerCase().trim();
 
-      //reset
       if (!formatedValue) {
         setSearchResult([]);
         return;
       }
 
-      // global partial matches
       const matchedNames = pokemonIndex.filter((pokemon) =>
         pokemon.name.includes(formatedValue),
       );
 
-      // no matches
       if (matchedNames.length === 0) {
         setSearchResult([]);
         return;
@@ -60,7 +52,6 @@ export default function Home() {
       try {
         setIsSearching(true);
 
-        // limit requests
         const limitedMatches = matchedNames.slice(0, 20);
 
         const results = await Promise.all(
@@ -75,7 +66,6 @@ export default function Home() {
     [pokemonIndex],
   );
 
-  //Debounced input handler
   function handleSearchInput(value: string) {
     setSearch(value);
 
@@ -88,17 +78,14 @@ export default function Home() {
     }, 300);
   }
 
-  // Source list
   const sourcePokemons = search ? searchResult : pokemons;
 
-  //Final displayed list
   const displayedPokemons = sourcePokemons.filter((pokemon) => {
     const matchesType = !selectedType || pokemon.types.includes(selectedType);
 
     return matchesType;
   });
 
-  //Load global Pokémon index
   useEffect(() => {
     async function loadIndex() {
       const data = await getPokemonIndex();
@@ -109,7 +96,6 @@ export default function Home() {
     loadIndex();
   }, []);
 
-  //Infinite scroll observer
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && !search) {
@@ -134,19 +120,23 @@ export default function Home() {
     <div className={S.HomeContainer}>
       <h1 className={S.HomeTitle}>PokéFinder</h1>
 
-      {/* Search and Filters */}
       <SearchBar onChange={handleSearchInput} value={search} />
       <TypeFilter selectedType={selectedType} onSelect={setSelectedType} />
 
-      {/* Search loading */}
-      {isSearching && <p className="text-white/60 mb-4">Searching...</p>}
-
-      {/* Not Found */}
-      {search && !isSearching && searchResult.length === 0 && (
-        <p className="text-red-300 mb-4">Pokémon not found.</p>
+      {isSearching && (
+        <p className="mb-4 flex items-center justify-center gap-2 text-white/60">
+          <LoaderCircle className="h-4 w-4 animate-spin" />
+          Searching...
+        </p>
       )}
 
-      {/* Pokémon List */}
+      {search && !isSearching && searchResult.length === 0 && (
+        <p className="mb-4 flex items-center justify-center gap-2 text-red-300">
+          <SearchX className="h-4 w-4" />
+          Pokémon not found.
+        </p>
+      )}
+
       <div className={S.PokemonGrid}>
         {displayedPokemons.map((pokemon, index) => (
           <div
@@ -167,13 +157,15 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Infinite scroll loading */}
-      {isLoading && <p className={S.LoadingText}>Loading...</p>}
+      {isLoading && (
+        <p className={`${S.LoadingText} flex items-center justify-center gap-2`}>
+          <LoaderCircle className="h-4 w-4 animate-spin" />
+          Loading...
+        </p>
+      )}
 
-      {/* Observer trigger */}
       <div ref={loadMoreRef} className={S.ObserverTrigger} />
 
-      {/* Modal */}
       {selectPokemon && (
         <PokemonModal
           pokemonName={selectPokemon}

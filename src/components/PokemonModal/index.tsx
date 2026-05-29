@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ArrowRight, LoaderCircle, Split, X } from "lucide-react";
 
 import type { EvolutionPokemon } from "../../types/evolution";
 import type { PokemonModalData } from "../../types/modal";
@@ -32,7 +33,16 @@ function EvolutionBranch({ pokemon }: { pokemon: EvolutionPokemon }) {
 
       {hasChildren && (
         <>
-          <span className={S.EvolutionConnector}>{"->"}</span>
+          <span className={S.EvolutionConnector}>
+            {isBranching ? (
+              <Split
+                className="h-5 w-5 rotate-90 transform"
+                strokeWidth={2}
+              />
+            ) : (
+              <ArrowRight className="h-5 w-5" strokeWidth={2} />
+            )}
+          </span>
 
           <div
             className={
@@ -108,7 +118,10 @@ export default function PokemonModal({
         <div className={S.ModalOverlay} />
 
         <div className={S.ModalContainer}>
-          <p className="text-white">Loading...</p>
+          <div className="flex items-center gap-2 text-white">
+            <LoaderCircle className="h-4 w-4 animate-spin" />
+            <p>Loading...</p>
+          </div>
         </div>
       </div>
     );
@@ -137,7 +150,7 @@ export default function PokemonModal({
           `}
         >
           <button onClick={onClose} className={S.CloseButton}>
-            x
+            <X className="h-5 w-5" strokeWidth={2} />
           </button>
 
           <div className={S.ModalHeader}>

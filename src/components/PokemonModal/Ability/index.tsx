@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { LoaderCircle } from "lucide-react";
 
 import { getAbilityDescription } from "../../../services/abilityService";
 
@@ -82,9 +83,14 @@ export default function Ability({ name, isHidden }: AbilityProps) {
 
       {open && (
         <div className={S.AbilityTooltip}>
-          {isLoading
-            ? "Loading..."
-            : (description ?? "No description available")}
+          {isLoading ? (
+            <span className="flex items-center gap-2">
+              <LoaderCircle className="h-4 w-4 animate-spin" />
+              Loading...
+            </span>
+          ) : (
+            description ?? "No description available"
+          )}
         </div>
       )}
     </div>
