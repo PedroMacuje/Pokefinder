@@ -138,10 +138,29 @@ export const ImageContainer = `
   flex items-center justify-center
 `;
 
+export const MainImageBlock = `
+  flex flex-col items-center gap-3
+`;
+
 export const PokemonImage = `
   w-52 h-52
   object-contain
   animate-fade-in
+`;
+
+export const PokemonTypeRow = `
+  flex flex-wrap items-center justify-center gap-2
+`;
+
+export const PokemonTypeBadge = `
+  px-3 py-1
+  rounded-full
+  text-xs md:text-sm
+  font-medium capitalize
+  text-white
+  border border-white/15
+  backdrop-blur-sm
+  shadow-sm
 `;
 
 export const StatsContainer = `
@@ -238,6 +257,22 @@ export const EvolutionCard = `
   flex flex-col items-center
   gap-1 md:gap-2
   shrink-0
+`;
+
+export const EvolutionTypeRow = `
+  flex flex-wrap items-center justify-center gap-1
+  max-w-[10rem]
+`;
+
+export const EvolutionTypeBadge = `
+  px-2 py-0.5
+  rounded-full
+  text-[10px] md:text-xs
+  font-medium capitalize
+  text-white
+  border border-white/15
+  backdrop-blur-sm
+  shadow-sm
 `;
 
 export const EvolutionLine = `

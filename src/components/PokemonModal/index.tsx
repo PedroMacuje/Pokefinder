@@ -5,6 +5,7 @@ import type { EvolutionPokemon } from "../../types/evolution";
 import type { PokemonModalData } from "../../types/modal";
 
 import { getPokemonModalData } from "../../services/Pokemon";
+import { getTypeBadgeColor } from "../PokemonCard/stylesVariants";
 
 import { getModalGradient } from "./stylesVariants";
 
@@ -28,6 +29,17 @@ function EvolutionBranch({ pokemon }: { pokemon: EvolutionPokemon }) {
             alt={pokemon.name}
             className={S.EvolutionImage}
           />
+        </div>
+
+        <div className={S.EvolutionTypeRow}>
+          {pokemon.types.map((type) => (
+            <span
+              key={type}
+              className={`${S.EvolutionTypeBadge} ${getTypeBadgeColor(type)}`}
+            >
+              {type}
+            </span>
+          ))}
         </div>
       </div>
 
@@ -169,11 +181,24 @@ export default function PokemonModal({
           <div className={S.ModalContent}>
             <div className={S.TopGrid}>
               <div className={S.ImageContainer}>
-                <img
-                  src={pokemon.image}
-                  alt={pokemon.name}
-                  className={S.PokemonImage}
-                />
+                <div className={S.MainImageBlock}>
+                  <img
+                    src={pokemon.image}
+                    alt={pokemon.name}
+                    className={S.PokemonImage}
+                  />
+
+                  <div className={S.PokemonTypeRow}>
+                    {pokemon.types.map((type) => (
+                      <span
+                        key={type}
+                        className={`${S.PokemonTypeBadge} ${getTypeBadgeColor(type)}`}
+                      >
+                        {type}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               <div className={S.StatsContainer}>

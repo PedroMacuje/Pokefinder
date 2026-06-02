@@ -30,5 +30,6 @@ export interface EvolutionPokemon {
   id: number;
   name: string;
   image: string;
+  types: string[];
   evolvesTo: EvolutionPokemon[];
 }
