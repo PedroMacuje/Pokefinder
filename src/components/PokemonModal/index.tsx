@@ -218,7 +218,9 @@ export default function PokemonModal({
             <div className={S.EvolutionSection}>
               <h3 className={S.EvolutionTitle}>Evolution</h3>
               <div className={S.EvolutionChain}>
-                <EvolutionBranch pokemon={pokemon.evolution} />
+                <div className={S.EvolutionTree}>
+                  <EvolutionBranch pokemon={pokemon.evolution} />
+                </div>
               </div>
             </div>
           </div>

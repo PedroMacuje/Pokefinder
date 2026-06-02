@@ -192,7 +192,8 @@ export const EvolutionTitle = `
 
 export const EvolutionImageWrapper = `
   relative
-  w-24 h-24
+  w-20 h-20
+  md:w-24 md:h-24
   rounded-full
 
   bg-white/10
@@ -213,14 +214,30 @@ export const EvolutionImageWrapper = `
 export const EvolutionChain = `
   flex flex-col items-center justify-center
   gap-6 mt-4
+  w-full
+  overflow-x-auto
+  pb-2
+`;
+
+export const EvolutionTree = `
+  flex
+  flex-col
+  items-center
+  gap-6
+  w-max
+  mx-auto
 `;
 
 export const EvolutionBranch = `
-  flex items-center justify-center gap-8
+  flex items-center justify-center
+  gap-4 md:gap-8
+  w-max
 `;
 
 export const EvolutionCard = `
-  flex flex-col items-center gap-2
+  flex flex-col items-center
+  gap-1 md:gap-2
+  shrink-0
 `;
 
 export const EvolutionLine = `
@@ -236,11 +253,14 @@ export const EvolutionItem = `
 `;
 
 export const EvolutionChildrenRow = `
-  flex items-center justify-center gap-8
+  flex items-center justify-center
+  gap-4 md:gap-8
+  w-max
 `;
 
 export const EvolutionChildrenColumn = `
-  flex flex-col items-center gap-10
+  flex flex-col items-center
+  gap-6 md:gap-10
 `;
 
 export const EvolutionConnector = `
@@ -248,13 +268,14 @@ export const EvolutionConnector = `
 `;
 
 export const EvolutionImage = `
-  w-20 h-20
+  w-16 h-16
+  md:w-20 md:h-20
   object-contain
   drop-shadow-lg
 `;
 
 export const EvolutionName = `
-  text-sm text-white capitalize
+  text-xs md:text-sm text-white capitalize
 `;
 
 export const EvolutionArrow = `
