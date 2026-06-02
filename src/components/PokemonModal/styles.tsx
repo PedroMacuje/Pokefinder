@@ -3,6 +3,12 @@ export const ModalWrapper = `
   flex items-center justify-center
 `;
 
+export const ModalWrapperClosing = `
+  fixed inset-0 z-50
+  flex items-center justify-center
+  pointer-events-none
+`;
+
 export const ModalOverlay = `
   absolute inset-0
   bg-black/60
@@ -14,7 +20,8 @@ export const ModalOverlayClosing = `
   absolute inset-0
   bg-black/60
   backdrop-blur-sm
-  animate-fade-out
+  opacity-0
+  transition-opacity duration-200 ease-out
 `;
 
 export const ModalContainer = `
@@ -54,7 +61,10 @@ export const ModalContainerClosing = `
   backdrop-blur-md
 
   shadow-2xl
-  animate-scale-out
+  opacity-0
+  scale-95
+  transition-all duration-200 ease-out
+  pointer-events-none
 `;
 
 export const ModalScrollContent = `

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowRight, LoaderCircle, Split, X } from "lucide-react";
 
 import type { EvolutionPokemon } from "../../types/evolution";
@@ -35,10 +35,7 @@ function EvolutionBranch({ pokemon }: { pokemon: EvolutionPokemon }) {
         <>
           <span className={S.EvolutionConnector}>
             {isBranching ? (
-              <Split
-                className="h-5 w-5 rotate-90 transform"
-                strokeWidth={2}
-              />
+              <Split className="h-5 w-5 rotate-90 transform" strokeWidth={2} />
             ) : (
               <ArrowRight className="h-5 w-5" strokeWidth={2} />
             )}
@@ -46,9 +43,7 @@ function EvolutionBranch({ pokemon }: { pokemon: EvolutionPokemon }) {
 
           <div
             className={
-              isBranching
-                ? S.EvolutionChildrenColumn
-                : S.EvolutionChildrenRow
+              isBranching ? S.EvolutionChildrenColumn : S.EvolutionChildrenRow
             }
           >
             {pokemon.evolvesTo.map((evolution) => (
@@ -73,18 +68,6 @@ export default function PokemonModal({
   const [pokemon, setPokemon] = useState<PokemonModalData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [animate, setAnimate] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
-  const closeTimeoutMs = 200;
-
-  const requestClose = useCallback(() => {
-    if (isClosing) return;
-
-    setIsClosing(true);
-
-    window.setTimeout(() => {
-      onClose();
-    }, closeTimeoutMs);
-  }, [closeTimeoutMs, isClosing, onClose]);
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -115,7 +98,7 @@ export default function PokemonModal({
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        requestClose();
+        onClose();
       }
     };
 
@@ -124,7 +107,7 @@ export default function PokemonModal({
     return () => {
       window.removeEventListener("keydown", handleKey);
     };
-  }, [onClose, requestClose]);
+  }, [onClose]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -158,16 +141,9 @@ export default function PokemonModal({
 
   return (
     <div className={S.ModalWrapper}>
-      <div
-        onClick={requestClose}
-        className={isClosing ? S.ModalOverlayClosing : S.ModalOverlay}
-      />
+      <div onClick={onClose} className={S.ModalOverlay} />
 
-      <div
-        className={
-          isClosing ? S.ModalContainerClosing : S.ModalContainer
-        }
-      >
+      <div className={S.ModalContainer}>
         <div className={S.ModalDarkLayer} />
         <div className={S.ModalGlow} />
 
@@ -178,7 +154,7 @@ export default function PokemonModal({
             ${modalGradient}
           `}
         >
-          <button onClick={requestClose} className={S.CloseButton}>
+          <button onClick={onClose} className={S.CloseButton}>
             <X className="h-5 w-5" strokeWidth={2} />
           </button>
 

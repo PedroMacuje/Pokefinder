@@ -11,10 +11,6 @@ export default {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" }
         },
-        fadeOut: {
-          "0%": { opacity: "1" },
-          "100%": { opacity: "0" }
-        },
         scaleIn: {
           "0%": { 
             opacity: "0", 
@@ -23,16 +19,6 @@ export default {
           "100%": { 
             opacity: "1", 
             transform: "scale(1)" 
-          }
-        },
-        scaleOut: {
-          "0%": {
-            opacity: "1",
-            transform: "scale(1)"
-          },
-          "100%": {
-            opacity: "0",
-            transform: "scale(0.96)"
           }
         },
         fadeUp: {
@@ -49,9 +35,7 @@ export default {
       animation: {
         "fade-up": "fadeUp 0.5s ease forwards",
         "fade-in": "fadeIn 0.2s ease-out forwards",
-        "fade-out": "fadeOut 0.2s ease-out forwards",
         "scale-in": "scaleIn 0.25s ease-out forwards",
-        "scale-out": "scaleOut 0.2s ease-out forwards",
       },
     },
   },
