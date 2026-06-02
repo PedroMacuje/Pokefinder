@@ -10,6 +10,13 @@ export const ModalOverlay = `
   animate-fade-in
 `;
 
+export const ModalOverlayClosing = `
+  absolute inset-0
+  bg-black/60
+  backdrop-blur-sm
+  animate-fade-out
+`;
+
 export const ModalContainer = `
   relative z-10
 
@@ -28,6 +35,26 @@ export const ModalContainer = `
 
   shadow-2xl
   animate-scale-in
+`;
+
+export const ModalContainerClosing = `
+  relative z-10
+
+  w-[95%]
+  max-w-3xl
+
+  my-4
+
+  rounded-2xl
+
+  overflow-hidden
+
+  bg-white/20
+  border border-white/30
+  backdrop-blur-md
+
+  shadow-2xl
+  animate-scale-out
 `;
 
 export const ModalScrollContent = `

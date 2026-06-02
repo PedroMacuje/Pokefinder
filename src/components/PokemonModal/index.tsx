@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ArrowRight, LoaderCircle, Split, X } from "lucide-react";
 
 import type { EvolutionPokemon } from "../../types/evolution";
@@ -73,6 +73,28 @@ export default function PokemonModal({
   const [pokemon, setPokemon] = useState<PokemonModalData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [animate, setAnimate] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+  const closeTimeoutMs = 200;
+
+  const requestClose = useCallback(() => {
+    if (isClosing) return;
+
+    setIsClosing(true);
+
+    window.setTimeout(() => {
+      onClose();
+    }, closeTimeoutMs);
+  }, [closeTimeoutMs, isClosing, onClose]);
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, []);
 
   useEffect(() => {
     const fetchPokemon = async () => {
@@ -93,7 +115,7 @@ export default function PokemonModal({
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        onClose();
+        requestClose();
       }
     };
 
@@ -102,7 +124,7 @@ export default function PokemonModal({
     return () => {
       window.removeEventListener("keydown", handleKey);
     };
-  }, [onClose]);
+  }, [onClose, requestClose]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -136,9 +158,16 @@ export default function PokemonModal({
 
   return (
     <div className={S.ModalWrapper}>
-      <div onClick={onClose} className={S.ModalOverlay} />
+      <div
+        onClick={requestClose}
+        className={isClosing ? S.ModalOverlayClosing : S.ModalOverlay}
+      />
 
-      <div className={S.ModalContainer}>
+      <div
+        className={
+          isClosing ? S.ModalContainerClosing : S.ModalContainer
+        }
+      >
         <div className={S.ModalDarkLayer} />
         <div className={S.ModalGlow} />
 
@@ -149,7 +178,7 @@ export default function PokemonModal({
             ${modalGradient}
           `}
         >
-          <button onClick={onClose} className={S.CloseButton}>
+          <button onClick={requestClose} className={S.CloseButton}>
             <X className="h-5 w-5" strokeWidth={2} />
           </button>
 
