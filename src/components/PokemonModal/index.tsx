@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
-import { ArrowRight, LoaderCircle, Split, X } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ArrowRight, ChevronDown, LoaderCircle, Split, X } from "lucide-react";
 
 import type { EvolutionPokemon } from "../../types/evolution";
-import type { PokemonModalData } from "../../types/modal";
+import type {
+  PokemonModalData,
+  PokemonMoveSortOption,
+} from "../../types/modal";
 
 import { getPokemonModalData } from "../../services/Pokemon";
 import { getTypeBadgeColor } from "../PokemonCard/stylesVariants";
@@ -80,6 +83,21 @@ export default function PokemonModal({
   const [pokemon, setPokemon] = useState<PokemonModalData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [animate, setAnimate] = useState(false);
+  const [moveSort, setMoveSort] = useState<PokemonMoveSortOption>("level");
+  const [expandedMove, setExpandedMove] = useState<string | null>(null);
+  const [isMoveSortOpen, setIsMoveSortOpen] = useState(false);
+  const moveSortRef = useRef<HTMLDivElement | null>(null);
+
+  const moveSortOptions: Array<{
+    value: PokemonMoveSortOption;
+    label: string;
+  }> = [
+    { value: "level", label: "Level" },
+    { value: "power", label: "Power" },
+    { value: "damageClass", label: "Damage Class" },
+    { value: "type", label: "Type" },
+    { value: "name", label: "Name" },
+  ];
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -128,6 +146,110 @@ export default function PokemonModal({
 
     return () => clearTimeout(timeout);
   }, [pokemon]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (!moveSortRef.current?.contains(event.target as Node)) {
+        setIsMoveSortOpen(false);
+      }
+    }
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsMoveSortOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
+
+  const sortedMoves = useMemo(() => {
+    if (!pokemon) {
+      return [];
+    }
+
+    const moves = [...pokemon.moves];
+
+    switch (moveSort) {
+      case "power":
+        return moves.sort((a, b) => {
+          const aPower = a.power ?? -1;
+          const bPower = b.power ?? -1;
+
+          if (aPower !== bPower) {
+            return bPower - aPower;
+          }
+
+          return a.name.localeCompare(b.name);
+        });
+
+      case "damageClass":
+        return moves.sort((a, b) => {
+          const classOrder = {
+            physical: 0,
+            special: 1,
+            status: 2,
+          } as const;
+
+          const aOrder =
+            classOrder[a.damageClass as keyof typeof classOrder] ?? 3;
+          const bOrder =
+            classOrder[b.damageClass as keyof typeof classOrder] ?? 3;
+
+          if (aOrder !== bOrder) {
+            return aOrder - bOrder;
+          }
+
+          return a.name.localeCompare(b.name);
+        });
+
+      case "type":
+        return moves.sort((a, b) => {
+          if (a.type !== b.type) {
+            return a.type.localeCompare(b.type);
+          }
+
+          const aLevel = a.level ?? Number.POSITIVE_INFINITY;
+          const bLevel = b.level ?? Number.POSITIVE_INFINITY;
+
+          if (aLevel !== bLevel) {
+            return aLevel - bLevel;
+          }
+
+          return a.name.localeCompare(b.name);
+        });
+
+      case "name":
+        return moves.sort((a, b) => a.name.localeCompare(b.name));
+
+      case "level":
+      default:
+        return moves.sort((a, b) => {
+          const aLevel = a.level ?? Number.POSITIVE_INFINITY;
+          const bLevel = b.level ?? Number.POSITIVE_INFINITY;
+
+          if (aLevel !== bLevel) {
+            return aLevel - bLevel;
+          }
+
+          return a.name.localeCompare(b.name);
+        });
+    }
+  }, [moveSort, pokemon]);
+
+  const handleMoveClick = (moveName: string) => {
+    setExpandedMove((current) => (current === moveName ? null : moveName));
+  };
+
+  const selectedMoveSortLabel =
+    moveSortOptions.find((option) => option.value === moveSort)?.label ??
+    "Level";
 
   if (isLoading || !pokemon) {
     return (
@@ -248,24 +370,123 @@ export default function PokemonModal({
               </div>
             </div>
 
-            <div className={S.MovesSection}>
-              <h3 className={S.SectionTitle}>Moves</h3>
-
-              <div className={S.MoveList}>
-                {pokemon.moves.map((move) => (
-                  <span key={move} className={S.MoveBadge}>
-                    {move}
-                  </span>
-                ))}
-              </div>
-            </div>
-
             <div className={S.EvolutionSection}>
               <h3 className={S.EvolutionTitle}>Evolution</h3>
               <div className={S.EvolutionChain}>
                 <div className={S.EvolutionTree}>
                   <EvolutionBranch pokemon={pokemon.evolution} />
                 </div>
+              </div>
+            </div>
+
+            <div className={S.MovesSection}>
+              <div className={S.MovesHeader}>
+                <h3 className={S.SectionTitle}>Moves</h3>
+
+                <div ref={moveSortRef} className={S.MoveSortGroup}>
+                  <span className={S.MoveSortLabel}>Sort by</span>
+
+                  <div className={S.MoveSortWrapper}>
+                    <button
+                      type="button"
+                      onClick={() => setIsMoveSortOpen((current) => !current)}
+                      className={S.MoveSortTrigger}
+                    >
+                      <span>{selectedMoveSortLabel}</span>
+
+                      <ChevronDown
+                        className={`absolute right-3 top-1/2 -translate-y-1/2 text-white/70 transition-transform duration-200 ${
+                          isMoveSortOpen ? "rotate-180" : ""
+                        }`}
+                        size={16}
+                      />
+                    </button>
+
+                    {isMoveSortOpen && (
+                      <div className={S.MoveSortPanel}>
+                        <div className={S.MoveSortOptionList}>
+                          {moveSortOptions.map((option) => (
+                            <button
+                              key={option.value}
+                              type="button"
+                              onClick={() => {
+                                setMoveSort(option.value);
+                                setIsMoveSortOpen(false);
+                              }}
+                              className={`
+                                ${S.MoveSortOption}
+                                ${
+                                  moveSort === option.value
+                                    ? S.MoveSortOptionActive
+                                    : ""
+                                }
+                              `}
+                            >
+                              {option.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className={S.MoveList}>
+                {sortedMoves.map((move) => (
+                  <div key={move.name}>
+                    <button
+                      type="button"
+                      onClick={() => handleMoveClick(move.name)}
+                      className={`
+                        ${S.MoveCard}
+                        ${S.MoveCardButton}
+                        ${expandedMove === move.name ? S.MoveCardActive : ""}
+                      `}
+                    >
+                      <div className={S.MoveCardTop}>
+                        <p className={S.MoveName}>{move.name}</p>
+
+                        <span className={S.MoveLevel}>
+                          {move.level !== null
+                            ? `Lv. ${move.level}`
+                            : move.learnMethod.replaceAll("-", " ")}
+                        </span>
+                      </div>
+
+                      <div className={S.MoveMetaRow}>
+                        <span className={S.MovePowerBadge}>
+                          Power {move.power ?? "—"}
+                        </span>
+
+                        <span className={S.MoveMetaBadge}>
+                          {move.damageClass}
+                        </span>
+
+                        <span
+                          className={`${S.MoveTypeBadge} ${getTypeBadgeColor(move.type)}`}
+                        >
+                          {move.type}
+                        </span>
+                      </div>
+                    </button>
+
+                    <div
+                      className={`
+                        ${S.MoveDescriptionPanel}
+                        ${
+                          expandedMove === move.name
+                            ? S.MoveDescriptionPanelOpen
+                            : S.MoveDescriptionPanelClosed
+                        }
+                      `}
+                    >
+                      <p className={S.MoveDescriptionText}>
+                        {move.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

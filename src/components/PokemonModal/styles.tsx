@@ -175,6 +175,184 @@ export const MovesSection = `
   mt-6
 `;
 
+export const MovesHeader = `
+  flex flex-col gap-3 md:flex-row md:items-end md:justify-between
+  mb-3
+`;
+
+export const MoveSortGroup = `
+  flex flex-col gap-1 items-center md:items-end
+`;
+
+export const MoveSortWrapper = `
+  relative
+  w-full md:w-56
+`;
+
+export const MoveSortLabel = `
+  text-xs uppercase tracking-[0.18em] text-white/60
+`;
+
+export const MoveSortTrigger = `
+  w-full
+  rounded-xl
+  border border-white/15
+  bg-white/15
+  px-3 py-2.5 pr-10
+  text-sm text-white
+  outline-none
+  backdrop-blur-md
+  shadow-sm
+  transition-all duration-200
+  hover:bg-white/20
+  focus:border-white/30
+  focus:bg-white/20
+  focus:shadow-lg
+  focus:shadow-black/10
+`;
+
+export const MoveSortChevron = `
+  pointer-events-none
+  absolute right-3 top-1/2
+  -translate-y-1/2
+  text-white/70
+`;
+
+export const MoveSortPanel = `
+  absolute
+  left-0 right-0 top-full z-20
+  mt-2
+  overflow-hidden
+  rounded-xl
+  border border-white/15
+  bg-white/15
+  backdrop-blur-md
+  shadow-2xl
+`;
+
+export const MoveSortOptionList = `
+  flex flex-col
+  p-1
+`;
+
+export const MoveSortOption = `
+  w-full
+  rounded-lg
+  px-3 py-2
+  text-left
+  text-sm text-white
+  capitalize
+  transition-colors duration-150
+  hover:bg-white/15
+`;
+
+export const MoveSortOptionActive = `
+  bg-white/20
+`;
+
+export const MoveList = `
+  flex flex-col gap-2
+`;
+
+export const MoveCard = `
+  rounded-2xl
+  border border-white/10
+  bg-slate-950/55
+  px-4 py-3
+  backdrop-blur-sm
+  shadow-sm
+`;
+
+export const MoveCardButton = `
+  w-full
+  text-left
+  cursor-pointer
+`;
+
+export const MoveCardActive = `
+  border-white/20
+  bg-slate-900/70
+`;
+
+export const MoveCardTop = `
+  flex items-center justify-between gap-3
+`;
+
+export const MoveName = `
+  text-sm md:text-base font-semibold capitalize text-white text-left
+`;
+
+export const MoveLevel = `
+  text-xs md:text-sm text-white/70 whitespace-nowrap
+`;
+
+export const MoveMetaRow = `
+  mt-3 flex flex-wrap items-center gap-2
+`;
+
+export const MoveMetaBadge = `
+  px-2.5 py-1
+  rounded-full
+  text-[10px] md:text-xs
+  font-medium capitalize
+  text-white
+  border border-white/15
+  bg-white/10
+  backdrop-blur-sm
+`;
+
+export const MoveTypeBadge = `
+  px-2.5 py-1
+  rounded-full
+  text-[10px] md:text-xs
+  font-medium capitalize
+  text-white
+  border border-white/15
+  backdrop-blur-sm
+`;
+
+export const MovePowerBadge = `
+  px-2.5 py-1
+  rounded-full
+  text-[10px] md:text-xs
+  font-medium
+  text-white
+  border border-white/15
+  bg-white/10
+  backdrop-blur-sm
+`;
+
+export const MoveDescriptionPanel = `
+  overflow-hidden
+  rounded-xl
+  border border-white/10
+  bg-slate-950/55
+  px-4
+  transition-all duration-300 ease-out
+`;
+
+export const MoveDescriptionPanelOpen = `
+  mt-3
+  max-h-40
+  py-3
+  opacity-100
+  translate-y-0
+  pointer-events-auto
+`;
+
+export const MoveDescriptionPanelClosed = `
+  mt-0
+  max-h-0
+  py-0
+  opacity-0
+  -translate-y-2
+  pointer-events-none
+`;
+
+export const MoveDescriptionText = `
+  text-sm text-white/85 leading-6
+`;
+
 export const SectionTitle = `
   font-semibold mb-3
   text-center text-white
@@ -215,27 +393,6 @@ export const HiddenAbilityLabel = `
 export const AbilityList = `
   flex flex-wrap
   justify-center gap-2
-`;
-
-export const MoveList = `
-  flex flex-wrap
-  justify-center gap-2
-  max-h-48
-  overflow-y-auto
-  px-2
-  py-1
-`;
-
-export const MoveBadge = `
-  px-3 py-1
-  rounded-full
-  text-xs md:text-sm
-  font-medium capitalize
-  text-white/90
-  border border-white/15
-  bg-white/10
-  backdrop-blur-sm
-  shadow-sm
 `;
 
 export const EvolutionSection = `
