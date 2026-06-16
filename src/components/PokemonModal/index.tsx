@@ -217,8 +217,16 @@ export default function PokemonModal({
             <div className={S.AbilitiesSection}>
               <h3 className={S.SectionTitle}>Abilities</h3>
 
-              <div className={S.AbilitiesGrid}>
-                <div className={S.AbilityColumn}>
+              <div
+                className={
+                  hiddenAbility ? S.AbilitiesGrid : S.AbilitiesGridSingle
+                }
+              >
+                <div
+                  className={
+                    hiddenAbility ? S.AbilityColumn : S.AbilityColumnSingle
+                  }
+                >
                   <p className={S.AbilityLabel}>Standard</p>
 
                   <div className={S.AbilityList}>
@@ -237,6 +245,18 @@ export default function PokemonModal({
                     </div>
                   </div>
                 )}
+              </div>
+            </div>
+
+            <div className={S.MovesSection}>
+              <h3 className={S.SectionTitle}>Moves</h3>
+
+              <div className={S.MoveList}>
+                {pokemon.moves.map((move) => (
+                  <span key={move} className={S.MoveBadge}>
+                    {move}
+                  </span>
+                ))}
               </div>
             </div>
 

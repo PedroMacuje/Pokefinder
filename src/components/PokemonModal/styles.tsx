@@ -171,6 +171,10 @@ export const AbilitiesSection = `
   mt-6
 `;
 
+export const MovesSection = `
+  mt-6
+`;
+
 export const SectionTitle = `
   font-semibold mb-3
   text-center text-white
@@ -181,8 +185,21 @@ export const AbilitiesGrid = `
   gap-6 items-start
 `;
 
+export const AbilitiesGridSingle = `
+  grid grid-cols-1
+  gap-6 items-start
+  justify-items-center
+  max-w-sm
+  mx-auto
+`;
+
 export const AbilityColumn = `
   text-center
+`;
+
+export const AbilityColumnSingle = `
+  text-center
+  w-full
 `;
 
 export const AbilityLabel = `
@@ -198,6 +215,27 @@ export const HiddenAbilityLabel = `
 export const AbilityList = `
   flex flex-wrap
   justify-center gap-2
+`;
+
+export const MoveList = `
+  flex flex-wrap
+  justify-center gap-2
+  max-h-48
+  overflow-y-auto
+  px-2
+  py-1
+`;
+
+export const MoveBadge = `
+  px-3 py-1
+  rounded-full
+  text-xs md:text-sm
+  font-medium capitalize
+  text-white/90
+  border border-white/15
+  bg-white/10
+  backdrop-blur-sm
+  shadow-sm
 `;
 
 export const EvolutionSection = `
