@@ -16,14 +16,6 @@ export const ModalOverlay = `
   animate-fade-in
 `;
 
-export const ModalOverlayClosing = `
-  absolute inset-0
-  bg-black/60
-  backdrop-blur-sm
-  opacity-0
-  transition-opacity duration-200 ease-out
-`;
-
 export const ModalContainer = `
   relative z-10
 
@@ -42,29 +34,6 @@ export const ModalContainer = `
 
   shadow-2xl
   animate-scale-in
-`;
-
-export const ModalContainerClosing = `
-  relative z-10
-
-  w-[95%]
-  max-w-3xl
-
-  my-4
-
-  rounded-2xl
-
-  overflow-hidden
-
-  bg-white/20
-  border border-white/30
-  backdrop-blur-md
-
-  shadow-2xl
-  opacity-0
-  scale-95
-  transition-all duration-200 ease-out
-  pointer-events-none
 `;
 
 export const ModalScrollContent = `
@@ -88,12 +57,6 @@ export const CloseButton = `
   z-20
   text-gray-500
   hover:text-black
-`;
-
-export const ModalGradient = `
-  absolute inset-0
-  bg-gradient-to-br
-  opacity-60
 `;
 
 export const ModalDarkLayer = `
@@ -209,13 +172,6 @@ export const MoveSortTrigger = `
   focus:bg-white/20
   focus:shadow-lg
   focus:shadow-black/10
-`;
-
-export const MoveSortChevron = `
-  pointer-events-none
-  absolute right-3 top-1/2
-  -translate-y-1/2
-  text-white/70
 `;
 
 export const MoveSortPanel = `
@@ -470,18 +426,6 @@ export const EvolutionTypeBadge = `
   shadow-sm
 `;
 
-export const EvolutionLine = `
-  flex items-center justify-center gap-4
-`;
-
-export const EvolutionBranchColumn = `
-  flex flex-col items-center gap-2
-`;
-
-export const EvolutionItem = `
-  flex flex-col items-center gap-2
-`;
-
 export const EvolutionChildrenRow = `
   flex items-center justify-center
   gap-4 md:gap-8
@@ -506,8 +450,4 @@ export const EvolutionImage = `
 
 export const EvolutionName = `
   text-xs md:text-sm text-white capitalize
-`;
-
-export const EvolutionArrow = `
-  text-white/70 text-xl
 `;
