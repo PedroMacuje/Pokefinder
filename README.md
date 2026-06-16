@@ -30,7 +30,7 @@ A modern Pokédex application built with **React** and **TypeScript**, powered b
 
 ## 🖼️ Preview
 
-> You can try it live clicking right here!
+> You can try it live clicking [RIGHT HERE!](https://thepokemonfinder.netlify.app/)
 
 
 <img width="1047" height="852" alt="image" src="https://github.com/user-attachments/assets/d7459074-5f6a-4c72-8b2b-2c95f9d0bb78" />
