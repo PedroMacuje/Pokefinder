@@ -30,12 +30,14 @@ A modern Pokédex application built with **React** and **TypeScript**, powered b
 
 ## 🖼️ Preview
 
-> Add screenshots or a GIF here.
+> You can try it live clicking right here!
 
-```md
-![Home Screen](./docs/home.png)
-![Pokemon Details](./docs/details.png)
-```
+
+<img width="1047" height="852" alt="image" src="https://github.com/user-attachments/assets/d7459074-5f6a-4c72-8b2b-2c95f9d0bb78" />
+
+<img width="865" height="815" alt="image" src="https://github.com/user-attachments/assets/cb3b9f20-d7bc-46bf-8b0e-34d052e7af76" />
+
+
 
 ---
 
